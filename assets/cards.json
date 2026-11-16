@@ -1508,13 +1508,15 @@
   "label": "Ketchup",
   "category": "Nourriture",
   "section": "nourriture",
-  "emoji": "🍅"
+  "image": "assets/cards/p163.webp",
+  "style": "photo"
  },
  {
   "id": 164,
   "label": "Mayonnaise",
   "category": "Nourriture",
   "section": "nourriture",
-  "emoji": "🥚"
+  "image": "assets/cards/p164.webp",
+  "style": "photo"
  }
 ]

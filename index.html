@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#6b3a9e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Voix d’Ambrine">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>La Voix d’Ambrine</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- Bande de phrase : toujours visible, jamais déplacée -->
+  <header id="strip" aria-label="Ma phrase">
+    <div id="tokens" role="list"><span class="placeholder">Je touche les images pour parler…</span></div>
+    <div id="stripBtns">
+      <button id="btnSpeak" class="big" aria-label="Dire la phrase"><span class="ico">🔊</span><span class="lbl">Dire</span></button>
+      <button id="btnReplay" aria-label="Rejouer la phrase"><span class="ico">↻</span><span class="lbl">Encore</span></button>
+      <button id="btnBack" aria-label="Supprimer la dernière image"><span class="ico">⌫</span><span class="lbl">Retirer</span></button>
+      <button id="btnClear" aria-label="Tout effacer"><span class="ico">✕</span><span class="lbl">Tout</span></button>
+    </div>
+    <div id="voiceWarn" hidden></div>
+  </header>
+
+  <nav id="nav" aria-label="Sections"></nav>
+
+  <main id="main">
+    <section id="view-home" class="view"></section>
+    <section id="view-cards" class="view hidden"></section>
+    <section id="view-story" class="view hidden"></section>
+    <section id="view-signs" class="view hidden"></section>
+    <section id="view-favs" class="view hidden"></section>
+    <section id="view-family" class="view hidden"></section>
+  </main>
+</div>
+
+<!-- Vidéo de signe (référence LSF) -->
+<dialog id="signDialog" aria-label="Signe LSF">
+  <div class="dlgHead"><strong id="signTitle"></strong><button id="closeSign" class="x" aria-label="Fermer">✕ Retour</button></div>
+  <video id="signVideo" playsinline controls preload="none"></video>
+  <p class="note" id="signNote">Vidéo de référence (Elix / AutiSignes). Ce n’est pas une animation du personnage.</p>
+  <div class="dlgBtns">
+    <button id="replaySign">↻ Rejouer</button>
+    <button id="slowSign">🐢 Ralenti</button>
+    <button id="closeSign2" class="primary">⬅ Revenir au pictogramme</button>
+  </div>
+</dialog>
+
+<!-- Phrase en grand (secours si pas de voix) -->
+<dialog id="bigText" aria-label="Phrase en grand"><div id="bigTextBody"></div><button id="closeBig" class="primary">Fermer</button></dialog>
+
+<!-- Réglages parents -->
+<dialog id="parentDialog" aria-label="Réglages parents">
+  <div class="dlgHead"><strong>Réglages parents</strong><button id="closeParent" class="x">✕ Fermer</button></div>
+  <div id="parentBody"></div>
+</dialog>
+
+<script src="anim.js"></script>
+<script src="flows.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

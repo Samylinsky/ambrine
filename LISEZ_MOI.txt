@@ -1,0 +1,72 @@
+LA VOIX D'AMBRINE — CLASSEUR NUMÉRIQUE  (version 2)
+=====================================================
+
+INSTALLER (Netlify)
+1. Dézipper. Glisser-déposer le CONTENU du dossier (pas le dossier lui-même) sur app.netlify.com/drop.
+   Choisir un accès privé (mot de passe) : les vidéos de signes sont réservées à l'usage familial.
+2. Ouvrir l'adresse sur la Samsung / l'iPad, puis « Ajouter à l'écran d'accueil ».
+3. Ouvrir une première fois avec Internet : l'application, les 72 pictogrammes et les 10 animations se gardent pour le hors ligne.
+4. Pour les 225 vidéos de signes hors ligne (≈ 40 Mo) : Réglages parents (MAINTENIR l'engrenage 1 seconde) > Hors ligne > Télécharger.
+5. Test sur ordinateur sans Netlify : dans ce dossier, lancer  python3 -m http.server 8000  puis ouvrir http://localhost:8000
+6. Page pour tester toutes les animations : /test-animations.html
+
+CE QUI FONCTIONNE (testé dans Chrome : tablette, téléphone, hors ligne)
+- 72 pictogrammes, chacun une carte « pièce de puzzle » indépendante, grande surface tactile, rangés par sections.
+  Ordre et emplacement fixes (jamais réorganisés automatiquement).
+- 10 VRAIES animations articulées à partir de tes dessins (voir plus bas) : Coucou, Boire, Manger, Bulles, Dormir,
+  Pleurer (carte « Triste »), Dessiner, Lire, Vélo, Danser.
+  Toucher la carte = elle s'anime 4 à 6 secondes puis revient à l'image lisible. Bouton ▶ pour rejouer sans ajouter le mot.
+- Bande de phrase toujours visible : ajouter (toucher une carte), retirer la dernière, tout effacer, dire, rejouer.
+  « Je veux » + « Boire » → « Je veux boire. »  L'application n'invente rien : elle dit seulement ce qui est choisi.
+- Voix française de l'appareil (synthèse vocale). Hors ligne si une voix française est installée sur l'appareil.
+  Sinon un bandeau jaune le dit, et « Dire » affiche la phrase en TRÈS grand (solution de secours visuelle).
+  Réglages parents > Voix : état de la voix, choix, vitesse, test.
+- Signes LSF : bouton 🖐 sur 33 cartes. Ouvre la vidéo de référence (Elix / AutiSignes), avec Rejouer, Ralenti ×0,5 et
+  « Revenir au pictogramme ». Section « Mes signes » : les 225 vidéos avec recherche et catégories.
+  Les vidéos ne sont JAMAIS remplacées par une animation du personnage.
+- Deux modes d'animation (Réglages parents) : A au toucher (par défaut) ; B douce en boucle (une seule carte à la fois, très
+  discrète) ; ou désactivées. Le réglage « réduire les animations » de l'appareil est respecté (case pour passer outre).
+- Sections : Accueil, Je communique, Mes émotions, Mes besoins (besoins + actions), Jeux et activités, Nourriture, Ma famille,
+  Lieux, Raconter, Mes signes, Favoris, Réglages parents.
+- Favoris (☆), renommer un pictogramme, ajouter des photos de famille, histoire à plusieurs phrases (Raconter).
+- Installable (PWA), rapide, responsive (Samsung, iPad), sans framework.
+
+COMMENT SONT FAITES LES 10 ANIMATIONS (honnêtement)
+Chaque dessin est DÉCOUPÉ en calques (avant-bras, main, bouteille, cuillère, bulles, roues, crayon, tête…) avec une
+articulation (pivot) : la main pivote sur le poignet, l'avant-bras sur le coude, la main est rattachée à l'avant-bras.
+Le moteur (anim.js) dessine ces calques sur un canvas. Ce n'est PAS un effet CSS sur l'image entière.
+Éléments ajoutés pour l'animation (dessinés dans le style des images) : les Z de Dormir, les gouttes de larmes, la nourriture
+sur la cuillère, la page qui se tourne (Lire), les rayons de roue (Vélo), les bulles supplémentaires.
+Les fichiers individuels sont dans  assets/anim/export/  (MP4 et GIF) et les calques dans  assets/anim/NN/.
+
+CE QUI N'EST PAS FAIT / LIMITES
+- Seules 10 cartes sur 72 ont une animation articulée. Les 62 autres : appui avec retour visuel + voix, SANS animation.
+- Les dessins d'origine sont petits (≈ 166 px de large) : agrandis 4×, les animations sont un peu douces/floues sur grand écran.
+- Parties du dessin cachées à l'origine (visage sous la bouteille ou la cuillère) : reconstituées à la main. Un œil exigeant
+  verra de petites retouches pendant le mouvement (surtout Boire, Manger, Danser aux bras). Le résultat reste lisible,
+  mais ce n'est pas un travail d'animateur : pour une qualité « film », il faudrait redessiner Ambrine en plusieurs calques.
+- Vélo : les roues tournent, les jambes oscillent légèrement, les traits de vitesse défilent ; le vélo n'avance pas sur un décor.
+- Danser : bras, corps et notes bougent ; les jambes ne sont pas articulées (écrasement léger).
+- Aucune animation de signe LSF n'a été créée. Les signes viennent uniquement des vidéos de référence.
+- Le lien pictogramme ↔ signe est fait d'après le TITRE (ex. « Coucou » → signe « Bonjour », « Je veux » → « Vouloir »,
+  « Trop de bruit » → « Bruit »). À VÉRIFIER par l'orthophoniste avant tout usage d'apprentissage.
+- « Ma famille » : les 72 pictogrammes ne contiennent aucun membre de la famille ; un parent ajoute des photos
+  (Réglages parents > Ma famille).
+- Certains libellés ont été déduits des images : à relire et renommer si besoin (Réglages parents).
+- Les vidéos : le hors ligne demande le téléchargement manuel (≈ 40 Mo). Non testé sur un vrai iPad / Samsung : testé dans Chrome
+  (tablette, téléphone, hors ligne). La voix dépend de l'appareil.
+- Validation CAA / orthophonique recommandée avant usage au quotidien.
+
+PROCHAINES ÉTAPES POSSIBLES
+- Autres animations (Parc, Danse, Musique, Courir, Câlin…) avec le même moteur : environ 1 à 2 h par animation.
+- Redessiner Ambrine en calques propres (tête, bras, jambes séparés) pour des animations plus fluides et un mouvement des jambes.
+- Enregistrer des voix (voix humaine) pour ne plus dépendre de la synthèse de l'appareil.
+
+FICHIERS
+index.html style.css app.js anim.js sw.js manifest.webmanifest   application
+test-animations.html                                            page de test des animations
+assets/cards.json  assets/signs.json                            données (72 cartes, 225 signes)
+assets/cards/*.webp                                             72 pictogrammes
+assets/anim/NN/                                                 calques + anim.json de chaque animation
+assets/anim/export/                                             MP4 et GIF individuels
+assets/signes/*.mp4                                             vidéos de référence (usage privé familial)

@@ -1,0 +1,1520 @@
+[
+ {
+  "id": 1,
+  "label": "Contente",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p1.webp",
+  "sign": 64,
+  "drawing": "assets/cards/01.webp",
+  "animD": "assets/anim/01",
+  "style": "photo"
+ },
+ {
+  "id": 2,
+  "label": "Énervée",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p2.webp",
+  "sign": 66,
+  "drawing": "assets/cards/02.webp",
+  "animD": "assets/anim/02",
+  "style": "photo"
+ },
+ {
+  "id": 3,
+  "label": "Je ne sais pas",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p3.webp",
+  "drawing": "assets/cards/03.webp",
+  "animD": "assets/anim/03",
+  "style": "photo"
+ },
+ {
+  "id": 4,
+  "label": "Aide-moi",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p4.webp",
+  "drawing": "assets/cards/04.webp",
+  "animD": "assets/anim/04",
+  "style": "photo"
+ },
+ {
+  "id": 5,
+  "label": "Non",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p5.webp",
+  "sign": 84,
+  "drawing": "assets/cards/05.webp",
+  "animD": "assets/anim/05",
+  "style": "photo"
+ },
+ {
+  "id": 6,
+  "label": "Mon robot",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p6.webp",
+  "drawing": "assets/cards/06.webp",
+  "animD": "assets/anim/06",
+  "style": "photo"
+ },
+ {
+  "id": 7,
+  "label": "J’ai faim",
+  "category": "Besoins",
+  "section": "besoins",
+  "image": "assets/cards/p7.webp",
+  "sign": 218,
+  "drawing": "assets/cards/07.webp",
+  "animD": "assets/anim/07",
+  "style": "photo"
+ },
+ {
+  "id": 8,
+  "label": "J’ai soif",
+  "category": "Besoins",
+  "section": "besoins",
+  "image": "assets/cards/p8.webp",
+  "sign": 219,
+  "drawing": "assets/cards/08.webp",
+  "animD": "assets/anim/08",
+  "style": "photo"
+ },
+ {
+  "id": 9,
+  "label": "Toilettes",
+  "category": "Besoins",
+  "section": "besoins",
+  "image": "assets/cards/p9.webp",
+  "sign": 148,
+  "drawing": "assets/cards/09.webp",
+  "animD": "assets/anim/09",
+  "style": "photo"
+ },
+ {
+  "id": 10,
+  "label": "J’ai mal au ventre",
+  "category": "Besoins",
+  "section": "besoins",
+  "image": "assets/cards/p10.webp",
+  "sign": 60,
+  "drawing": "assets/cards/10.webp",
+  "animD": "assets/anim/10",
+  "style": "photo"
+ },
+ {
+  "id": 11,
+  "label": "Me reposer",
+  "category": "Besoins",
+  "section": "besoins",
+  "image": "assets/cards/p11.webp",
+  "drawing": "assets/cards/11.webp",
+  "animD": "assets/anim/11",
+  "style": "photo"
+ },
+ {
+  "id": 12,
+  "label": "Câlin",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p12.webp",
+  "drawing": "assets/cards/12.webp",
+  "animD": "assets/anim/12",
+  "style": "photo"
+ },
+ {
+  "id": 13,
+  "label": "Trop de bruit",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p13.webp",
+  "sign": 217,
+  "drawing": "assets/cards/13.webp",
+  "animD": "assets/anim/13",
+  "style": "photo"
+ },
+ {
+  "id": 14,
+  "label": "Trop de monde",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p14.webp",
+  "drawing": "assets/cards/14.webp",
+  "animD": "assets/anim/14",
+  "style": "photo"
+ },
+ {
+  "id": 15,
+  "label": "Je suis mouillée",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p15.webp",
+  "drawing": "assets/cards/15.webp",
+  "animD": "assets/anim/15",
+  "style": "photo"
+ },
+ {
+  "id": 16,
+  "label": "J’ai chaud",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p16.webp",
+  "drawing": "assets/cards/16.webp",
+  "animD": "assets/anim/16",
+  "style": "photo"
+ },
+ {
+  "id": 17,
+  "label": "J’ai froid",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p17.webp",
+  "drawing": "assets/cards/17.webp",
+  "animD": "assets/anim/17",
+  "style": "photo"
+ },
+ {
+  "id": 18,
+  "label": "J’ai mal à la tête",
+  "category": "Besoins",
+  "section": "besoins",
+  "image": "assets/cards/p18.webp",
+  "sign": 63,
+  "drawing": "assets/cards/18.webp",
+  "animD": "assets/anim/18",
+  "style": "photo"
+ },
+ {
+  "id": 19,
+  "label": "Je veux",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p19.webp",
+  "sign": 215,
+  "drawing": "assets/cards/19.webp",
+  "animD": "assets/anim/19",
+  "style": "photo"
+ },
+ {
+  "id": 20,
+  "label": "Je ne veux pas",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p20.webp",
+  "drawing": "assets/cards/20.webp",
+  "animD": "assets/anim/20",
+  "style": "photo"
+ },
+ {
+  "id": 21,
+  "label": "Oui",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p21.webp",
+  "sign": 85,
+  "drawing": "assets/cards/21.webp",
+  "animD": "assets/anim/21",
+  "style": "photo"
+ },
+ {
+  "id": 22,
+  "label": "Je n’aime pas",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p22.webp",
+  "drawing": "assets/cards/22.webp",
+  "animD": "assets/anim/22",
+  "style": "photo"
+ },
+ {
+  "id": 23,
+  "label": "Encore",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p23.webp",
+  "sign": 81,
+  "drawing": "assets/cards/23.webp",
+  "animD": "assets/anim/23",
+  "style": "photo"
+ },
+ {
+  "id": 24,
+  "label": "Un câlin",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p24.webp",
+  "drawing": "assets/cards/24.webp",
+  "animD": "assets/anim/24",
+  "style": "photo"
+ },
+ {
+  "id": 25,
+  "label": "Je",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p25.webp",
+  "sign": 210,
+  "drawing": "assets/cards/25.webp",
+  "animD": "assets/anim/25",
+  "style": "photo"
+ },
+ {
+  "id": 26,
+  "label": "Toi",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p26.webp",
+  "sign": 213,
+  "drawing": "assets/cards/26.webp",
+  "animD": "assets/anim/26",
+  "style": "photo"
+ },
+ {
+  "id": 27,
+  "label": "Avec",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p27.webp",
+  "drawing": "assets/cards/27.webp",
+  "animD": "assets/anim/27",
+  "style": "photo"
+ },
+ {
+  "id": 28,
+  "label": "Plus",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p28.webp",
+  "drawing": "assets/cards/28.webp",
+  "animD": "assets/anim/28",
+  "style": "photo"
+ },
+ {
+  "id": 29,
+  "label": "Je ne comprends pas",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p29.webp",
+  "drawing": "assets/cards/29.webp",
+  "animD": "assets/anim/29",
+  "style": "photo"
+ },
+ {
+  "id": 30,
+  "label": "Attendre",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p30.webp",
+  "sign": 77,
+  "drawing": "assets/cards/30.webp",
+  "animD": "assets/anim/30",
+  "style": "photo"
+ },
+ {
+  "id": 31,
+  "label": "Coucou",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p31.webp",
+  "sign": 79,
+  "drawing": "assets/cards/31.webp",
+  "animD": "assets/anim/31",
+  "style": "photo"
+ },
+ {
+  "id": 32,
+  "label": "Merci",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p32.webp",
+  "sign": 83,
+  "drawing": "assets/cards/32.webp",
+  "animD": "assets/anim/32",
+  "style": "photo"
+ },
+ {
+  "id": 33,
+  "label": "Là",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p33.webp",
+  "drawing": "assets/cards/33.webp",
+  "animD": "assets/anim/33",
+  "style": "photo"
+ },
+ {
+  "id": 34,
+  "label": "Viens",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p34.webp",
+  "drawing": "assets/cards/34.webp",
+  "animD": "assets/anim/34",
+  "style": "photo"
+ },
+ {
+  "id": 35,
+  "label": "Stop",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p35.webp",
+  "drawing": "assets/cards/35.webp",
+  "animD": "assets/anim/35",
+  "style": "photo"
+ },
+ {
+  "id": 36,
+  "label": "Je réfléchis",
+  "category": "Parler",
+  "section": "communique",
+  "image": "assets/cards/p36.webp",
+  "drawing": "assets/cards/36.webp",
+  "animD": "assets/anim/36",
+  "style": "photo"
+ },
+ {
+  "id": 37,
+  "label": "Jouer aux blocs",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p37.webp",
+  "drawing": "assets/cards/37.webp",
+  "animD": "assets/anim/37",
+  "style": "photo"
+ },
+ {
+  "id": 38,
+  "label": "Puzzle",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p38.webp",
+  "drawing": "assets/cards/38.webp",
+  "animD": "assets/anim/38",
+  "style": "photo"
+ },
+ {
+  "id": 39,
+  "label": "Construire",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p39.webp",
+  "drawing": "assets/cards/39.webp",
+  "animD": "assets/anim/39",
+  "style": "photo"
+ },
+ {
+  "id": 40,
+  "label": "Vélo",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p40.webp",
+  "drawing": "assets/cards/40.webp",
+  "animD": "assets/anim/40",
+  "style": "photo"
+ },
+ {
+  "id": 41,
+  "label": "Doudou",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p41.webp",
+  "drawing": "assets/cards/41.webp",
+  "animD": "assets/anim/41",
+  "style": "photo"
+ },
+ {
+  "id": 42,
+  "label": "Peluche",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p42.webp",
+  "drawing": "assets/cards/42.webp",
+  "animD": "assets/anim/42",
+  "style": "photo"
+ },
+ {
+  "id": 43,
+  "label": "Dessiner",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p43.webp",
+  "sign": 94,
+  "drawing": "assets/cards/43.webp",
+  "animD": "assets/anim/43",
+  "style": "photo"
+ },
+ {
+  "id": 44,
+  "label": "Danser",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p44.webp",
+  "sign": 93,
+  "drawing": "assets/cards/44.webp",
+  "animD": "assets/anim/44",
+  "style": "photo"
+ },
+ {
+  "id": 45,
+  "label": "Musique",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p45.webp",
+  "sign": 99,
+  "drawing": "assets/cards/45.webp",
+  "animD": "assets/anim/45",
+  "style": "photo"
+ },
+ {
+  "id": 46,
+  "label": "Bulles",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p46.webp",
+  "drawing": "assets/cards/46.webp",
+  "animD": "assets/anim/46",
+  "style": "photo"
+ },
+ {
+  "id": 47,
+  "label": "Lire",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p47.webp",
+  "sign": 96,
+  "drawing": "assets/cards/47.webp",
+  "animD": "assets/anim/47",
+  "style": "photo"
+ },
+ {
+  "id": 48,
+  "label": "Ballon",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p48.webp",
+  "sign": 3,
+  "drawing": "assets/cards/48.webp",
+  "animD": "assets/anim/48",
+  "style": "photo"
+ },
+ {
+  "id": 49,
+  "label": "Manger",
+  "category": "Actions",
+  "section": "besoins",
+  "image": "assets/cards/p49.webp",
+  "sign": 22,
+  "drawing": "assets/cards/49.webp",
+  "animD": "assets/anim/49",
+  "style": "photo"
+ },
+ {
+  "id": 50,
+  "label": "Boire",
+  "category": "Actions",
+  "section": "besoins",
+  "image": "assets/cards/p50.webp",
+  "sign": 13,
+  "drawing": "assets/cards/50.webp",
+  "animD": "assets/anim/50",
+  "style": "photo"
+ },
+ {
+  "id": 51,
+  "label": "Dormir",
+  "category": "Actions",
+  "section": "besoins",
+  "image": "assets/cards/p51.webp",
+  "drawing": "assets/cards/51.webp",
+  "animD": "assets/anim/51",
+  "style": "photo"
+ },
+ {
+  "id": 52,
+  "label": "Laver les mains",
+  "category": "Actions",
+  "section": "besoins",
+  "image": "assets/cards/p52.webp",
+  "sign": 74,
+  "drawing": "assets/cards/52.webp",
+  "animD": "assets/anim/52",
+  "style": "photo"
+ },
+ {
+  "id": 53,
+  "label": "S’habiller",
+  "category": "Actions",
+  "section": "besoins",
+  "image": "assets/cards/p53.webp",
+  "drawing": "assets/cards/53.webp",
+  "animD": "assets/anim/53",
+  "style": "photo"
+ },
+ {
+  "id": 54,
+  "label": "Sortir",
+  "category": "Actions",
+  "section": "besoins",
+  "image": "assets/cards/p54.webp",
+  "drawing": "assets/cards/54.webp",
+  "animD": "assets/anim/54",
+  "style": "photo"
+ },
+ {
+  "id": 55,
+  "label": "Yaourt",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p55.webp",
+  "sign": 170,
+  "drawing": "assets/cards/55.webp",
+  "animD": "assets/anim/55",
+  "style": "photo"
+ },
+ {
+  "id": 56,
+  "label": "Couscous",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p56.webp",
+  "drawing": "assets/cards/56.webp",
+  "animD": "assets/anim/56",
+  "style": "photo"
+ },
+ {
+  "id": 57,
+  "label": "Pizza",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p57.webp",
+  "drawing": "assets/cards/57.webp",
+  "animD": "assets/anim/57",
+  "style": "photo"
+ },
+ {
+  "id": 58,
+  "label": "Pâtes",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p58.webp",
+  "drawing": "assets/cards/58.webp",
+  "animD": "assets/anim/58",
+  "style": "photo"
+ },
+ {
+  "id": 59,
+  "label": "Frites",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p59.webp",
+  "drawing": "assets/cards/59.webp",
+  "animD": "assets/anim/59",
+  "style": "photo"
+ },
+ {
+  "id": 60,
+  "label": "Chocolat",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p60.webp",
+  "sign": 16,
+  "drawing": "assets/cards/60.webp",
+  "animD": "assets/anim/60",
+  "style": "photo"
+ },
+ {
+  "id": 61,
+  "label": "Maison",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p61.webp",
+  "sign": 144,
+  "drawing": "assets/cards/61.webp",
+  "animD": "assets/anim/61",
+  "style": "photo"
+ },
+ {
+  "id": 62,
+  "label": "École",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p62.webp",
+  "sign": 191,
+  "drawing": "assets/cards/62.webp",
+  "animD": "assets/anim/62",
+  "style": "photo"
+ },
+ {
+  "id": 63,
+  "label": "Parc",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p63.webp",
+  "sign": 138,
+  "drawing": "assets/cards/63.webp",
+  "animD": "assets/anim/63",
+  "style": "photo"
+ },
+ {
+  "id": 64,
+  "label": "Magasin",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p64.webp",
+  "sign": 106,
+  "drawing": "assets/cards/64.webp",
+  "animD": "assets/anim/64",
+  "style": "photo"
+ },
+ {
+  "id": 65,
+  "label": "Maîtresse",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p65.webp",
+  "drawing": "assets/cards/65.webp",
+  "animD": "assets/anim/65",
+  "style": "photo"
+ },
+ {
+  "id": 66,
+  "label": "Dehors",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p66.webp",
+  "drawing": "assets/cards/66.webp",
+  "animD": "assets/anim/66",
+  "style": "photo"
+ },
+ {
+  "id": 67,
+  "label": "Très contente",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p67.webp",
+  "drawing": "assets/cards/67.webp",
+  "animD": "assets/anim/67",
+  "style": "photo"
+ },
+ {
+  "id": 68,
+  "label": "Triste",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p68.webp",
+  "sign": 69,
+  "drawing": "assets/cards/68.webp",
+  "animD": "assets/anim/68",
+  "style": "photo"
+ },
+ {
+  "id": 69,
+  "label": "Calme",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p69.webp",
+  "drawing": "assets/cards/69.webp",
+  "animD": "assets/anim/69",
+  "style": "photo"
+ },
+ {
+  "id": 70,
+  "label": "En classe",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p70.webp",
+  "drawing": "assets/cards/70.webp",
+  "animD": "assets/anim/70",
+  "style": "photo"
+ },
+ {
+  "id": 71,
+  "label": "Aire de jeux",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p71.webp",
+  "drawing": "assets/cards/71.webp",
+  "animD": "assets/anim/71",
+  "style": "photo"
+ },
+ {
+  "id": 72,
+  "label": "Sport",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p72.webp",
+  "sign": 101,
+  "drawing": "assets/cards/72.webp",
+  "animD": "assets/anim/72",
+  "style": "photo"
+ },
+ {
+  "id": 73,
+  "label": "Papa",
+  "category": "Famille",
+  "section": "famille",
+  "image": "assets/cards/f73.webp",
+  "drawing": "assets/cards/73.webp",
+  "animD": "assets/anim/73",
+  "style": "photo"
+ },
+ {
+  "id": 74,
+  "label": "Maman",
+  "category": "Famille",
+  "section": "famille",
+  "image": "assets/cards/f74.webp",
+  "drawing": "assets/cards/74.webp",
+  "animD": "assets/anim/74",
+  "style": "photo"
+ },
+ {
+  "id": 75,
+  "label": "Mamie",
+  "category": "Famille",
+  "section": "famille",
+  "image": "assets/cards/f75.webp",
+  "drawing": "assets/cards/75.webp",
+  "animD": "assets/anim/75",
+  "style": "photo"
+ },
+ {
+  "id": 76,
+  "label": "Papi",
+  "category": "Famille",
+  "section": "famille",
+  "image": "assets/cards/f76.webp",
+  "drawing": "assets/cards/76.webp",
+  "animD": "assets/anim/76",
+  "style": "photo"
+ },
+ {
+  "id": 77,
+  "label": "Yusuf",
+  "category": "Famille",
+  "section": "famille",
+  "image": "assets/cards/f77.webp",
+  "drawing": "assets/cards/77.webp",
+  "animD": "assets/anim/77",
+  "style": "photo"
+ },
+ {
+  "id": 78,
+  "label": "Nayla",
+  "category": "Famille",
+  "section": "famille",
+  "image": "assets/cards/f78.webp",
+  "drawing": "assets/cards/78.webp",
+  "animD": "assets/anim/78",
+  "style": "photo"
+ },
+ {
+  "id": 79,
+  "label": "Copines",
+  "category": "Famille",
+  "section": "famille",
+  "image": "assets/cards/p79.webp",
+  "drawing": "assets/cards/79.webp",
+  "animD": "assets/anim/79",
+  "style": "photo"
+ },
+ {
+  "id": 80,
+  "label": "iPad",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p80.webp",
+  "drawing": "assets/cards/80.webp",
+  "animD": "assets/anim/80",
+  "style": "photo"
+ },
+ {
+  "id": 81,
+  "label": "Jardin",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p81.webp",
+  "drawing": "assets/cards/81.webp",
+  "animD": "assets/anim/81",
+  "style": "photo"
+ },
+ {
+  "id": 82,
+  "label": "Cantine",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p82.webp",
+  "drawing": "assets/cards/82.webp",
+  "animD": "assets/anim/82",
+  "style": "photo"
+ },
+ {
+  "id": 83,
+  "label": "Pain",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p83.webp",
+  "drawing": "assets/cards/83.webp",
+  "animD": "assets/anim/83",
+  "style": "photo"
+ },
+ {
+  "id": 84,
+  "label": "Eau",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p84.webp",
+  "drawing": "assets/cards/84.webp",
+  "animD": "assets/anim/84",
+  "style": "photo"
+ },
+ {
+  "id": 85,
+  "label": "Jus",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p85.webp",
+  "drawing": "assets/cards/85.webp",
+  "animD": "assets/anim/85",
+  "style": "photo"
+ },
+ {
+  "id": 86,
+  "label": "Gâteau",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p86.webp",
+  "drawing": "assets/cards/86.webp",
+  "animD": "assets/anim/86",
+  "style": "photo"
+ },
+ {
+  "id": 87,
+  "label": "Fruits",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p87.webp",
+  "drawing": "assets/cards/87.webp",
+  "animD": "assets/anim/87",
+  "style": "photo"
+ },
+ {
+  "id": 88,
+  "label": "Cadeau",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p88.webp",
+  "drawing": "assets/cards/88.webp",
+  "animD": "assets/anim/88",
+  "style": "photo"
+ },
+ {
+  "id": 89,
+  "label": "Pomme",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p89.webp",
+  "style": "photo"
+ },
+ {
+  "id": 90,
+  "label": "Banane",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p90.webp",
+  "style": "photo"
+ },
+ {
+  "id": 91,
+  "label": "Lait",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p91.webp",
+  "style": "photo"
+ },
+ {
+  "id": 92,
+  "label": "Riz",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p92.webp",
+  "style": "photo"
+ },
+ {
+  "id": 93,
+  "label": "Viande",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p93.webp",
+  "style": "photo"
+ },
+ {
+  "id": 94,
+  "label": "Poisson",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p94.webp",
+  "style": "photo"
+ },
+ {
+  "id": 95,
+  "label": "Légumes",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p95.webp",
+  "style": "photo"
+ },
+ {
+  "id": 96,
+  "label": "Soupe",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p96.webp",
+  "style": "photo"
+ },
+ {
+  "id": 97,
+  "label": "Glace",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p97.webp",
+  "style": "photo"
+ },
+ {
+  "id": 98,
+  "label": "Bonbons",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p98.webp",
+  "style": "photo"
+ },
+ {
+  "id": 99,
+  "label": "Biscuit",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p99.webp",
+  "style": "photo"
+ },
+ {
+  "id": 100,
+  "label": "Fromage",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "image": "assets/cards/p100.webp",
+  "style": "photo"
+ },
+ {
+  "id": 101,
+  "label": "Dents",
+  "category": "Mon corps",
+  "section": "besoins",
+  "image": "assets/cards/p101.webp",
+  "style": "photo"
+ },
+ {
+  "id": 102,
+  "label": "Oreille",
+  "category": "Mon corps",
+  "section": "besoins",
+  "image": "assets/cards/p102.webp",
+  "style": "photo"
+ },
+ {
+  "id": 103,
+  "label": "Pied",
+  "category": "Mon corps",
+  "section": "besoins",
+  "image": "assets/cards/p103.webp",
+  "style": "photo"
+ },
+ {
+  "id": 104,
+  "label": "Main",
+  "category": "Mon corps",
+  "section": "besoins",
+  "image": "assets/cards/p104.webp",
+  "style": "photo"
+ },
+ {
+  "id": 105,
+  "label": "Yeux",
+  "category": "Mon corps",
+  "section": "besoins",
+  "image": "assets/cards/p105.webp",
+  "style": "photo"
+ },
+ {
+  "id": 106,
+  "label": "Gorge",
+  "category": "Mon corps",
+  "section": "besoins",
+  "image": "assets/cards/p106.webp",
+  "style": "photo"
+ },
+ {
+  "id": 107,
+  "label": "Fatiguée",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p107.webp",
+  "style": "photo"
+ },
+ {
+  "id": 108,
+  "label": "Peur",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p108.webp",
+  "style": "photo"
+ },
+ {
+  "id": 109,
+  "label": "Malade",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p109.webp",
+  "style": "photo"
+ },
+ {
+  "id": 110,
+  "label": "Hier",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p110.webp",
+  "style": "photo"
+ },
+ {
+  "id": 111,
+  "label": "Aujourd’hui",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p111.webp",
+  "style": "photo"
+ },
+ {
+  "id": 112,
+  "label": "Demain",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p112.webp",
+  "style": "photo"
+ },
+ {
+  "id": 113,
+  "label": "Lundi",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p113.webp",
+  "style": "photo"
+ },
+ {
+  "id": 114,
+  "label": "Mardi",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p114.webp",
+  "style": "photo"
+ },
+ {
+  "id": 115,
+  "label": "Mercredi",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p115.webp",
+  "style": "photo"
+ },
+ {
+  "id": 116,
+  "label": "Jeudi",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p116.webp",
+  "style": "photo"
+ },
+ {
+  "id": 117,
+  "label": "Vendredi",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p117.webp",
+  "style": "photo"
+ },
+ {
+  "id": 118,
+  "label": "Samedi",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p118.webp",
+  "style": "photo"
+ },
+ {
+  "id": 119,
+  "label": "Dimanche",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p119.webp",
+  "style": "photo"
+ },
+ {
+  "id": 120,
+  "label": "Tu viens ?",
+  "category": "Je demande",
+  "section": "demande",
+  "image": "assets/cards/p120.webp",
+  "style": "photo"
+ },
+ {
+  "id": 121,
+  "label": "Tu joues avec moi ?",
+  "category": "Je demande",
+  "section": "demande",
+  "image": "assets/cards/p121.webp",
+  "style": "photo"
+ },
+ {
+  "id": 122,
+  "label": "Regarde !",
+  "category": "Je demande",
+  "section": "demande",
+  "image": "assets/cards/p122.webp",
+  "style": "photo"
+ },
+ {
+  "id": 123,
+  "label": "Où ?",
+  "category": "Je demande",
+  "section": "demande",
+  "image": "assets/cards/p123.webp",
+  "style": "photo"
+ },
+ {
+  "id": 124,
+  "label": "Quand ?",
+  "category": "Je demande",
+  "section": "demande",
+  "image": "assets/cards/p124.webp",
+  "style": "photo"
+ },
+ {
+  "id": 125,
+  "label": "Qui ?",
+  "category": "Je demande",
+  "section": "demande",
+  "image": "assets/cards/p125.webp",
+  "style": "photo"
+ },
+ {
+  "id": 126,
+  "label": "Qu’est-ce qu’on fait ?",
+  "category": "Je demande",
+  "section": "demande",
+  "image": "assets/cards/p126.webp",
+  "style": "photo"
+ },
+ {
+  "id": 127,
+  "label": "On m’embête",
+  "category": "Je demande",
+  "section": "demande",
+  "image": "assets/cards/p127.webp",
+  "style": "photo"
+ },
+ {
+  "id": 128,
+  "label": "Parti",
+  "category": "Je demande",
+  "section": "demande",
+  "image": "assets/cards/p128.webp",
+  "style": "photo"
+ },
+ {
+  "id": 129,
+  "label": "Piscine",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p129.webp",
+  "style": "photo"
+ },
+ {
+  "id": 130,
+  "label": "Nager",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p130.webp",
+  "style": "photo"
+ },
+ {
+  "id": 131,
+  "label": "Récréation",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p131.webp",
+  "style": "photo"
+ },
+ {
+  "id": 132,
+  "label": "Balançoire",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p132.webp",
+  "style": "photo"
+ },
+ {
+  "id": 133,
+  "label": "Toboggan",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p133.webp",
+  "style": "photo"
+ },
+ {
+  "id": 134,
+  "label": "Télé",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p134.webp",
+  "style": "photo"
+ },
+ {
+  "id": 135,
+  "label": "Bain",
+  "category": "Actions",
+  "section": "besoins",
+  "image": "assets/cards/p135.webp",
+  "style": "photo"
+ },
+ {
+  "id": 136,
+  "label": "Voiture",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p136.webp",
+  "style": "photo"
+ },
+ {
+  "id": 137,
+  "label": "Ce matin",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p137.webp",
+  "style": "photo"
+ },
+ {
+  "id": 138,
+  "label": "Cet après-midi",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p138.webp",
+  "style": "photo"
+ },
+ {
+  "id": 139,
+  "label": "Ce soir",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/p139.webp",
+  "style": "photo"
+ },
+ {
+  "id": 140,
+  "label": "Ce week-end",
+  "category": "Jours",
+  "section": "jours",
+  "image": "assets/cards/famille_tous.webp",
+  "style": "photo"
+ },
+ {
+  "id": 141,
+  "label": "Anniversaire",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p141.webp",
+  "style": "photo"
+ },
+ {
+  "id": 142,
+  "label": "Docteur",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p142.webp",
+  "style": "photo"
+ },
+ {
+  "id": 143,
+  "label": "Toute seule",
+  "category": "Émotions",
+  "section": "emotions",
+  "image": "assets/cards/p143.webp",
+  "style": "photo"
+ },
+ {
+  "id": 144,
+  "label": "C’était bien",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p144.webp",
+  "style": "photo"
+ },
+ {
+  "id": 145,
+  "label": "Ce n’était pas bien",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p145.webp",
+  "style": "photo"
+ },
+ {
+  "id": 146,
+  "label": "M’amuser",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p146.webp",
+  "style": "photo"
+ },
+ {
+  "id": 147,
+  "label": "Je vais",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p147.webp",
+  "style": "photo"
+ },
+ {
+  "id": 148,
+  "label": "Je raconte",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p148.webp",
+  "style": "photo"
+ },
+ {
+  "id": 149,
+  "label": "Je demande",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p149.webp",
+  "style": "photo"
+ },
+ {
+  "id": 150,
+  "label": "Ma journée",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p150.webp",
+  "style": "photo"
+ },
+ {
+  "id": 151,
+  "label": "Pourquoi ?",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p151.webp",
+  "style": "photo"
+ },
+ {
+  "id": 152,
+  "label": "Tout le monde",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/famille_tous.webp",
+  "style": "photo"
+ },
+ {
+  "id": 153,
+  "label": "Orthophoniste",
+  "category": "Famille",
+  "section": "famille",
+  "image": "assets/cards/p153.webp",
+  "style": "photo"
+ },
+ {
+  "id": 154,
+  "label": "Bus",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p154.webp",
+  "style": "photo"
+ },
+ {
+  "id": 155,
+  "label": "Fini",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p155.webp",
+  "style": "photo"
+ },
+ {
+  "id": 156,
+  "label": "Bonjour",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p156.webp",
+  "style": "photo"
+ },
+ {
+  "id": 157,
+  "label": "Au revoir",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p157.webp",
+  "style": "photo"
+ },
+ {
+  "id": 158,
+  "label": "S’il te plaît",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p158.webp",
+  "style": "photo"
+ },
+ {
+  "id": 159,
+  "label": "Bisou",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p159.webp",
+  "style": "photo"
+ },
+ {
+  "id": 160,
+  "label": "Pardon",
+  "category": "Communiquer",
+  "section": "communique",
+  "image": "assets/cards/p160.webp",
+  "style": "photo"
+ },
+ {
+  "id": 161,
+  "label": "Mon AESH",
+  "category": "Famille",
+  "section": "famille",
+  "image": "assets/cards/p161.webp",
+  "style": "photo"
+ },
+ {
+  "id": 162,
+  "label": "À pied",
+  "category": "Lieux",
+  "section": "lieux",
+  "emoji": "🚶"
+ },
+ {
+  "id": 163,
+  "label": "Ketchup",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "emoji": "🍅"
+ },
+ {
+  "id": 164,
+  "label": "Mayonnaise",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "emoji": "🥚"
+ }
+]

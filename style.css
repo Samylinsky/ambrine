@@ -342,3 +342,27 @@ body.immersive #band #tokens{flex:0 0 auto;width:auto;max-width:none;overflow:vi
 
 /* V35 borne de commande */
 .finiBtn{background:#2e9b57;box-shadow:0 4px 0 #1d6b3a;width:100%;min-height:90px!important;flex-direction:row;gap:14px;margin:6px 0 12px}
+
+/* V38 : Accueil à 8 thèmes, sans colonne, plus lumineux */
+:root{--bg:#ffffff}
+#app,body.stripTop #app{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto!important;grid-template-areas:"nav" "main" "strip"!important}
+body.stripTop #app{grid-template-areas:"nav" "strip" "main"!important;grid-template-rows:auto auto minmax(0,1fr)!important}
+#nav{flex-direction:row!important;gap:10px;padding:8px 12px!important;background:#fff;border:0!important;border-bottom:3px solid #f0e8fa!important;overflow:visible}
+#nav button{flex-direction:row!important;gap:8px;min-height:54px!important;min-width:0!important;padding:6px 18px!important;font-size:1.05rem!important;border-radius:16px;background:#f6f0ff;color:var(--violet)}
+#nav button .ico{font-size:1.6rem!important}
+#nav button[data-id=reglages]{background:transparent;color:#9a92a8;font-size:.8rem!important;padding:6px 8px!important}
+#nav button[data-id=reglages] span:last-child{display:none}
+#nav.away button[data-id=home]{background:var(--violet);color:#fff;box-shadow:0 4px 0 #4b2575}
+body.immersive #nav{display:none}
+.themes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:6px}
+@media (max-width:900px){.themes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.theme{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px 10px 16px;border-radius:26px;background:var(--tc);color:#fff;font-weight:900;font-size:1.35rem;box-shadow:0 6px 0 color-mix(in srgb,var(--tc) 70%,#000);min-height:190px;text-shadow:0 2px 3px #0004}
+.theme img,.theme .emo{width:100%;max-width:200px;aspect-ratio:3/2;object-fit:cover;border-radius:18px;background:#fff;border:4px solid #fff;font-size:4rem;display:flex;align-items:center;justify-content:center}
+.theme:active{transform:translateY(4px);box-shadow:0 2px 0 color-mix(in srgb,var(--tc) 70%,#000)}
+.homeHello h1{font-size:1.6rem}
+.homeHello{margin:0 0 8px!important;gap:12px!important}
+.homeHello .helloVid{width:58px!important;height:58px!important}
+.homeHello h1{font-size:1.4rem!important;margin:0!important}
+.theme{min-height:0;padding:10px 8px 12px;gap:6px}
+.theme img,.theme .emo{max-width:180px;max-height:120px}
+#main{padding-top:10px!important}

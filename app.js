@@ -7,13 +7,13 @@ const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == nu
 const SECTIONS = [
   { id: 'home', label: 'Accueil', ico: '🏠', color: '#6b3a9e' },
   { id: 'journee', label: 'Ma journée', ico: '📋', color: '#d9762b', type: 'dayplan' },
-  { id: 'phrases', label: 'Mes phrases', ico: '🗣️', color: '#8a56c2', type: 'phrases', hidden: true },
+  { id: 'phrases', label: 'Je parle', ico: '🗣️', color: '#8a56c2', type: 'phrases', hidden: true },
   { id: 'anims', label: 'Ça bouge !', ico: '🎬', color: '#e0559a', type: 'anims', hidden: true },
   { id: 'communique', label: 'Je communique', ico: '💬', color: '#7c5cd6', groups: [['communique', '']] },
   { id: 'emotions', label: 'Mes émotions', ico: '💗', color: '#ef7fb0', groups: [['emotions', '']] },
-  { id: 'besoins', label: 'Mes besoins', ico: '💧', color: '#3ea0e6', groups: [['besoins', 'Besoins', 'Besoins'], ['besoins', 'Actions', 'Actions'], ['besoins', 'Mon corps', 'Mon corps']] },
+  { id: 'besoins', label: 'J’ai besoin', ico: '💧', color: '#3ea0e6', groups: [['besoins', 'Besoins', 'Besoins'], ['besoins', 'Actions', 'Actions'], ['besoins', 'Mon corps', 'Mon corps']] },
   { id: 'jeux', label: 'Jeux et activités', ico: '🧩', color: '#f2a33a', groups: [['jeux', '']] },
-  { id: 'nourriture', label: 'Nourriture', ico: '🍽️', color: '#58b85d', groups: [['nourriture', '']] },
+  { id: 'nourriture', label: 'Je mange', ico: '🍽️', color: '#58b85d', groups: [['nourriture', '']] },
   { id: 'famille', label: 'Ma famille', ico: '👪', color: '#c9548f', type: 'family' },
   { id: 'jours', label: 'Les jours', ico: '📅', color: '#3b82a6', type: 'days' },
   { id: 'lieux', label: 'Lieux', ico: '📍', color: '#e8704f', groups: [['lieux', '']] },
@@ -277,13 +277,23 @@ function renderHome() {
   im.classList.add('helloVid'); im.onclick = () => { try { im.currentTime = 0; im.play(); } catch (e) { } speak('Coucou, je suis Ambrine !'); };
   hello.append(im, h('h1', '', 'Bonjour Ambrine !')); v.append(hello);
   setTimeout(() => { if (animAllowed()) im.play().catch(() => { }); }, 400);
-  const big = h('div', 'flowRoots homeBig');
-  const db = h('button', 'flowBtn big day'); const dc = lookup('Ma journée'); db.append(dc && dc.image ? Object.assign(document.createElement('img'), { src: dc.image, alt: '' }) : h('div', 'emo', '📋'), h('span', '', 'Ma journée')); db.onclick = () => go('journee'); big.append(db);
-  S.flows && S.flows.roots.filter(r => !r.hidden).forEach(r => big.append(rootBtn(r, true)));
-  v.append(big);
+  const g = h('div', 'themes');
+  THEMES.forEach(t => { const b = h('button', 'theme'); b.style.setProperty('--tc', t.color); b.append(picEl(lookup(t.pic) || { emoji: t.emoji }), h('span', '', t.lab)); b.onclick = () => { S.words = []; drawStrip(); t.go(); }; g.append(b); });
+  v.append(g);
 }
+/* l'Accueil : 8 portes d'entrée, chacune ouvre des images qui construisent la phrase */
+const THEMES = [
+  { lab: 'Ma journée', pic: 'Ma journée', emoji: '📅', color: '#f2862e', go: () => go('journee') },
+  { lab: 'Je mange', pic: 'Manger', emoji: '🍽️', color: '#35b24a', go: () => go('nourriture') },
+  { lab: 'J’ai besoin', pic: 'Toilettes', emoji: '💧', color: '#2196e8', go: () => go('besoins') },
+  { lab: 'Je ressens', pic: 'Contente', emoji: '💗', color: '#ec4f9a', go: () => startFlow('suis') },
+  { lab: 'Je joue', pic: 'Puzzle', emoji: '🧩', color: '#f4b400', go: () => startFlow('joue') },
+  { lab: 'Ma famille', pic: 'Tout le monde', emoji: '👨‍👩‍👧', color: '#8b57d9', go: () => go('famille') },
+  { lab: 'Je vais', pic: 'Sortir', emoji: '🚌', color: '#14ae9f', go: () => startFlow('vais') },
+  { lab: 'Je demande', pic: 'Tu viens ?', emoji: '👋', color: '#ff7043', go: () => startFlow('demande') }];
 function renderCards(sec) {
   const v = $('#view-cards'); v.replaceChildren(); v.append(viewTitle(sec));
+  if (sec.id === 'besoins') { const r = h('div', 'flowRoots'); [['veux', 'Je veux…', 'Je veux'], ['mal', 'J’ai mal…', 'J’ai mal à la tête']].forEach(([k, lab, pic]) => { const b = h('button', 'flowBtn big'); b.append(picEl(lookup(pic)), h('span', '', lab)); b.onclick = () => startFlow(k); r.append(b); }); v.append(r); }
   sec.groups.forEach(([section, , cat]) => {
     let list = S.cards.filter(c => c.section === section && (!cat || c.category === cat));
     if (!list.length) return;
@@ -702,7 +712,9 @@ function renderDayplan(sec) {
   say.append(
     mk('Ce que j’ai fait', 'Hier', () => startFlow('raconte'), 'past'),
     mk('Aujourd’hui, je vais…', 'Aujourd’hui', () => startFlow('ajd')),
-    mk('Demain, je vais…', 'Demain', () => startFlow('demain'), 'next'));
+    mk('Demain, je vais…', 'Demain', () => startFlow('demain'), 'next'),
+    mk('Ma journée d’école', 'École', () => startFlow('ecole')),
+    mk('Quel jour ?', 'Aujourd’hui', () => go('jours')));
   v.append(h('h2', '', 'Je raconte'), say);
   // le programme
   const any = DAY_MOMENTS.some(m => planOf(today)[m[0]]);
@@ -739,12 +751,13 @@ function renderView() {
     else if (sec.type === 'story') renderStory(); else if (sec.type === 'signs') renderSigns();
   }
   $$('#nav button').forEach(b => b.classList.toggle('on', b.dataset.id === (S.view === 'phrases' ? 'home' : S.view)));
+  $('#nav').classList.toggle('away', S.view !== 'home');
   $('#main').scrollTop = 0;
 }
 function go(id) { stopCurrent(); S.starter = null; S.person = null; S.dayEdit = null; if (id !== 'phrases') S.flow = null; S.dateFlow = null; S.view = id; renderView(); }
 function buildNav() {
   const n = $('#nav'); n.replaceChildren();
-  SECTIONS.filter(s => !s.hidden).forEach(s => {
+  SECTIONS.filter(s => ['home', 'reglages'].includes(s.id)).forEach(s => {
     const b = h('button'); b.dataset.id = s.id; b.style.setProperty('--navc', s.color); b.append(h('span', 'ico', s.ico), h('span', '', s.label)); b.setAttribute('aria-label', s.label);
     if (s.id === 'reglages') {          // accès parents : maintenir appuyé
       let t = null; const start = e => { e.preventDefault(); toast('Maintenir appuyé…'); t = setTimeout(() => { t = null; openParent(); }, 1200); }; const end = () => { if (t) { clearTimeout(t); t = null; } };
@@ -771,6 +784,8 @@ const seg = (opts, cur, fn) => { const d = h('div', 'seg'); opts.forEach(([val, 
 function chk(label, val, fn) { const l = h('label', 'row'); const i = document.createElement('input'); i.type = 'checkbox'; i.checked = val; i.style.cssText = 'width:26px;height:26px'; i.onchange = () => fn(i.checked); l.append(i, document.createTextNode(' ' + label)); return l; }
 function openParent() {
   const b = $('#parentBody'); b.replaceChildren();
+  { const c = h('div', 'card'); c.append(h('h3', '', 'Tous les classeurs (pour les adultes)'));
+    const r = h('div', 'row'); SECTIONS.filter(x => !x.hidden && !['home', 'reglages'].includes(x.id)).forEach(x => { const bt = h('button', 'btn', x.ico + ' ' + x.label); bt.onclick = () => { $('#parentDialog').close(); go(x.id); }; r.append(bt); }); c.append(r); b.append(c); }
   // animations
   let c = h('div', 'card'); c.append(h('h3', '', 'Animations'));
   c.append(seg([['touch', 'A · Au toucher (par défaut)'], ['loop', 'B · Douce, en boucle'], ['off', 'Désactivées']], S.set.animMode, v => { S.set.animMode = v; saveSet(); applyAmbient(); renderView(); }));
@@ -836,7 +851,7 @@ function openParent() {
   dl.onclick = () => downloadVideos(dl, pg); c.append(dl, pg); b.append(c);
   // à propos
   c = h('div', 'card'); c.append(h('h3', '', 'À savoir'));
-  c.append(h('p', 'note', 'Version 37 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
+  c.append(h('p', 'note', 'Version 38 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
   const wipe = h('button', 'btn', '🗑 Effacer favoris, phrases et réglages'); wipe.onclick = () => { if (confirm('Tout effacer sur cet appareil (hors photos de famille) ?')) { ['ambrine-favs', 'ambrine-labels', 'ambrine-story', 'ambrine-settings'].forEach(k => localStorage.removeItem(k)); location.reload(); } };
   c.append(wipe); b.append(c);
   if (!$('#parentDialog').open) $('#parentDialog').showModal();

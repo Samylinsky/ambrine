@@ -255,6 +255,7 @@ function buildFlows(find) {
   const jouerEns = { title: 'On joue à quoi ?', fini: true, items: [
     I('Puzzle', 'on joue au puzzle ?'), I('Ballon', 'on joue au ballon ?'), I('iPad', 'on joue à l’iPad ?'), I('Jouer aux blocs', 'on joue aux blocs ?'),
     I('Dessiner', 'on dessine ensemble ?'), I('Danser', 'on danse ensemble ?'), I('Jardin', 'on joue dans le jardin ?'), I({ label: 'Ensemble', emoji: '🤝' }, 'on joue ensemble ?')] };
+  roots.push({ key: 'joue', hidden: true, label: 'Je joue…', pic: 'Puzzle', word: { label: 'Je veux jouer', say: 'je veux jouer' }, node: play, cont: veuxCont });
   roots.push({ key: 'jouerEns', hidden: true, label: 'On joue ?', pic: 'Puzzle', word: { label: 'On joue', say: '' }, node: jouerEns });
   roots.push(
     { key: 'repas', hidden: true, label: 'Je veux manger…', pic: 'Manger', word: { label: 'Je veux manger', say: 'je veux manger' }, node: cmdPlat, cont: foodMore },

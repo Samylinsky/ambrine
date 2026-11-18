@@ -1,4 +1,4 @@
-const CORE = 'ambrine-core-v38', VID = 'ambrine-signes-v1';
+const CORE = 'ambrine-core-v39', VID = 'ambrine-signes-v1';
 const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'flows.js', 'anim.js', 'test-animations.html', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png', 'assets/cards.json', 'assets/signs.json', 'assets/anim/index.json', 'assets/video/ambrine_coucou.mp4', 'assets/video/ambrine_salut.mp4', 'assets/cards/ambrine_coucou_poster.jpg'];
 self.addEventListener('install', e => e.waitUntil((async () => {
   const c = await caches.open(CORE);

@@ -70,7 +70,7 @@ function buildFlows(find) {
   foodMore.items.push(
     I({ label: 'Avec…', emoji: '➕' }, '', withFood), I({ label: 'Dessert', emoji: '🍨' }, 'et en dessert', dessert),
     I('Boire', 'et boire', drinkMore), I('J’ai faim', 'parce que j’ai faim'),
-    I({ label: 'Restaurant', emoji: '🍽️' }, 'au restaurant'), I('Cantine', 'à la cantine'), I('Maison', 'à la maison'));
+    I('Restaurant', 'au restaurant'), I('Cantine', 'à la cantine'), I('Maison', 'à la maison'));
   foodMore.cont = foodMore; meals.cont = foodMore; drinks.cont = foodMore;
 
   /* ================= COMMANDE (comme une borne) : plat → sauce → boisson → dessert ================= */
@@ -159,7 +159,7 @@ function buildFlows(find) {
     I('Bus', 'en bus', act), I('Voiture', 'en voiture', act), I('À pied', 'à pied', act), I({ label: 'Passer', emoji: '⏭️' }, '', act)] });
   const vaisItems = [
     I('École', 'à l’école', how(ecoleAct)), I('Maison', 'à la maison', how(maisonAct)), I('Parc', 'au parc', how(parcAct)), I('Piscine', 'à la piscine', how(piscAct)),
-    I('Magasin', 'au magasin', how(magAct)), I({ label: 'Restaurant', emoji: '🍽️' }, 'au restaurant', how(restoAct)), I('Jardin', 'dans le jardin', parcAct), I('Aire de jeux', 'à l’aire de jeux', how(parcAct)),
+    I('Magasin', 'au magasin', how(magAct)), I('Restaurant', 'au restaurant', how(restoAct)), I('Jardin', 'dans le jardin', parcAct), I('Aire de jeux', 'à l’aire de jeux', how(parcAct)),
     I('Dehors', 'dehors', parcAct), I('Cantine', 'à la cantine', cantAct), I('Mamie', 'chez mamie', how(famAct)), I('Papi', 'chez papi', how(famAct)),
     I('Docteur', 'chez le docteur', how(docAct)), I('Orthophoniste', 'chez l’orthophoniste', how(orthoAct)), I('Bus', 'prendre le bus', busTo), I('Voiture', 'partir en voiture', carTo), I('Bain', 'prendre mon bain'), I('Dormir', 'dormir'), I('Toilettes', 'aux toilettes')];
   const vais = { title: 'Je vais…', items: vaisItems };
@@ -170,11 +170,17 @@ function buildFlows(find) {
   const withWho = { title: 'Avec qui ?', items: [
     I('Papa', 'avec papa'), I('Maman', 'avec maman'), I('Yusuf', 'avec Yusuf'), I('Nayla', 'avec Nayla'), I('Mamie', 'avec mamie'), I('Papi', 'avec papi'),
     I('Copines', 'avec mes copines'), I('Tout le monde', 'avec la famille'), I({ label: 'Passer', emoji: '⏭️' }, '')] };
+  /* plusieurs personnes : « avec Yusuf et Nayla et papa » */
+  const PEOPLE = [['Papa', 'papa'], ['Maman', 'maman'], ['Yusuf', 'Yusuf'], ['Nayla', 'Nayla'], ['Mamie', 'mamie'], ['Papi', 'papi'], ['Copines', 'mes copines']];
+  const whoMore = { title: 'Et qui encore ?', hideUsed: true, items: [] };
+  whoMore.items = PEOPLE.map(([c, s]) => I(c, 'et ' + s, whoMore)).concat([END]);
+  withWho.items.forEach(it => { if (it.say && it.say !== 'avec la famille') it.next = whoMore; });
+  playWith.items.forEach(it => { if (/^avec (papa|maman|mes copines|Yusuf|Nayla|mamie|papi)$/.test(it.say)) it.next = whoMore; });
   ACTS.forEach(n => { if (n === docAct) return; n.items.forEach(it => { if (it !== END && !it.next && !/avec|voir|papa|maman|copines|maîtresse/i.test(it.say)) it.next = withWho; }); });
   const vaisAfter = { title: 'Et après, je vais…', items: vaisItems };
   vaisCont.title = 'Et après…'; delete vaisCont.pre;
   vaisCont.items = [I({ label: 'Et après, je vais…', emoji: '➡️' }, 'et après, je vais', vaisAfter), I('Contente', 'et je suis contente'), I('Triste', 'mais je suis triste')];
-  withWho.cont = vaisCont;
+  withWho.cont = vaisCont; whoMore.cont = vaisCont;
   ACTS.forEach(n => { n.cont = vaisCont; });
 
   /* ================= JE RACONTE (quand, où, avec qui, quoi, comment, pourquoi) ================= */

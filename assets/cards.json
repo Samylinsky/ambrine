@@ -1518,5 +1518,13 @@
   "section": "nourriture",
   "image": "assets/cards/p164.webp",
   "style": "photo"
+ },
+ {
+  "id": 165,
+  "label": "Restaurant",
+  "category": "Lieux",
+  "section": "lieux",
+  "image": "assets/cards/p165.webp",
+  "style": "photo"
  }
 ]

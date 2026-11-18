@@ -68,7 +68,7 @@ function updateVoiceWarn() {
 }
 function sentenceText(words) {
   const t = words.map((w, i) => w.say != null ? w.say : (i === 0 ? w.label : w.label.charAt(0).toLowerCase() + w.label.slice(1))).join(' ');
-  const r = t.replace(/\s+/g, ' ').replace(/ ,/g, ',').replace(/,(\s*,)+/g, ',').trim();
+  const r = t.replace(/\s+/g, ' ').replace(/ ,/g, ',').replace(/,(\s*,)+/g, ',').replace(/ et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines)(?= et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines))/g, ', $1').trim();
   return r.charAt(0).toUpperCase() + r.slice(1);
 }
 function speak(text, big = false) {
@@ -541,7 +541,8 @@ function renderPhrases() {
   v.append(h('h2', '', cur.title));
   if (cur.fini && S.words.length) { const fb = h('button', 'flowBtn big finiBtn'); fb.append(h('div', 'emo', '✅'), h('span', '', 'Fini')); fb.onclick = finishFlow; v.append(fb); }
   const g = h('div', 'grid');
-  cur.items.forEach(it => { const c = Object.assign({}, it.c); g.append(makeTile(c, { pick: () => pickItem(it) })); });
+  const said = sentenceText(S.words).toLowerCase();
+  cur.items.filter(it => !(cur.hideUsed && it.say && said.includes(it.say.replace(/^et /, '').toLowerCase()))).forEach(it => { const c = Object.assign({}, it.c); g.append(makeTile(c, { pick: () => pickItem(it) })); });
   v.append(g);
 }
 
@@ -851,7 +852,7 @@ function openParent() {
   dl.onclick = () => downloadVideos(dl, pg); c.append(dl, pg); b.append(c);
   // à propos
   c = h('div', 'card'); c.append(h('h3', '', 'À savoir'));
-  c.append(h('p', 'note', 'Version 39 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
+  c.append(h('p', 'note', 'Version 40 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
   const wipe = h('button', 'btn', '🗑 Effacer favoris, phrases et réglages'); wipe.onclick = () => { if (confirm('Tout effacer sur cet appareil (hors photos de famille) ?')) { ['ambrine-favs', 'ambrine-labels', 'ambrine-story', 'ambrine-settings'].forEach(k => localStorage.removeItem(k)); location.reload(); } };
   c.append(wipe); b.append(c);
   if (!$('#parentDialog').open) $('#parentDialog').showModal();

@@ -128,16 +128,16 @@ function buildFlows(find) {
   const ACTS = [];
   const act = (title, items, pre) => { const n = { title, pre: pre || 'pour', items: items.map(it => ({ ...it })).concat([END]) }; ACTS.push(n); return n; };
   const ecoleAct = act('À l’école, pour…', [
-    I('Récréation', 'jouer à la récréation'), I('Piscine', 'aller à la piscine avec la classe'), I('Nager', 'nager à la piscine'), I('Dessiner', 'faire un dessin'), I('Copines', 'voir mes copines'), I('Maîtresse', 'voir la maîtresse'), I('Mon AESH', 'travailler avec mon AESH'),
+    I('Récréation', 'jouer à la récréation'), I('Piscine', 'aller à la piscine avec la classe'), I('Nager', 'nager à la piscine'), I('Dessiner', 'faire un dessin'), I('Maîtresse', 'voir la maîtresse'), I('Mon AESH', 'travailler avec mon AESH'),
     I('Lire', 'lire'), I('Cantine', 'manger à la cantine'), I('En classe', 'travailler en classe'), I('Puzzle', 'faire un puzzle'),
     I('Sport', 'faire du sport'), I('Musique', 'écouter de la musique'), I('Danser', 'danser'), I('Jouer aux blocs', 'jouer aux blocs')]);
   const parcAct = act('Là-bas, pour…', [
     MAM, I('Balançoire', 'faire de la balançoire'), I('Toboggan', 'faire du toboggan'), I('Ballon', 'jouer au ballon'), I('Vélo', 'faire du vélo'),
-    I('Copines', 'voir mes copines'), I('Bulles', 'faire des bulles'), I('Sport', 'faire du sport')]);
+    I('Bulles', 'faire des bulles'), I('Sport', 'faire du sport')]);
   const piscAct = act('À la piscine, pour…', [
-    I('Nager', 'nager'), MAM, I('Toboggan', 'faire du toboggan'), I('Papa', 'jouer avec papa'), I('Maman', 'jouer avec maman'), I('Copines', 'voir mes copines')]);
+    I('Nager', 'nager'), MAM, I('Toboggan', 'faire du toboggan'), I('Jouer', 'jouer')]);
   const maisonAct = act('À la maison, pour…', [
-    I(JOUER, 'jouer'), I('Manger', 'manger'), I('Dormir', 'dormir'), I('Papa', 'voir papa'), I('Maman', 'voir maman'),
+    I(JOUER, 'jouer'), I('Manger', 'manger'), I('Dormir', 'dormir'),
     I('iPad', 'jouer à l’iPad'), I('Télé', 'regarder la télé'), I('Lire', 'lire'), I('Dessiner', 'dessiner'), I('Puzzle', 'faire un puzzle'),
     I('Me reposer', 'me reposer'), I('Bain', 'prendre mon bain')]);
   const famAct = act('Là-bas, pour…', [
@@ -169,12 +169,13 @@ function buildFlows(find) {
   /* où → comment → pour quoi → AVEC QUI → et après (seulement ce qui va avec) */
   const withWho = { title: 'Avec qui ?', items: [
     I('Papa', 'avec papa'), I('Maman', 'avec maman'), I('Yusuf', 'avec Yusuf'), I('Nayla', 'avec Nayla'), I('Mamie', 'avec mamie'), I('Papi', 'avec papi'),
-    I('Copines', 'avec mes copines'), I('Tout le monde', 'avec la famille'), I({ label: 'Passer', emoji: '⏭️' }, '')] };
+    I('Copines', 'avec mes copines'), I({ label: 'Toute la famille', image: 'assets/cards/famille_tous.webp', style: 'photo' }, 'avec toute la famille'),
+    I({ label: 'Toute seule', emoji: '🙋‍♀️' }, 'toute seule'), I({ label: 'Passer', emoji: '⏭️' }, '')] };
   /* plusieurs personnes : « avec Yusuf et Nayla et papa » */
   const PEOPLE = [['Papa', 'papa'], ['Maman', 'maman'], ['Yusuf', 'Yusuf'], ['Nayla', 'Nayla'], ['Mamie', 'mamie'], ['Papi', 'papi'], ['Copines', 'mes copines']];
   const whoMore = { title: 'Et qui encore ?', hideUsed: true, items: [] };
   whoMore.items = PEOPLE.map(([c, s]) => I(c, 'et ' + s, whoMore)).concat([END]);
-  withWho.items.forEach(it => { if (it.say && it.say !== 'avec la famille') it.next = whoMore; });
+  withWho.items.forEach(it => { if (it.say && it.say.startsWith('avec ') && it.say !== 'avec toute la famille') it.next = whoMore; });
   playWith.items.forEach(it => { if (/^avec (papa|maman|mes copines|Yusuf|Nayla|mamie|papi)$/.test(it.say)) it.next = whoMore; });
   ACTS.forEach(n => { if (n === docAct) return; n.items.forEach(it => { if (it !== END && !it.next && !/avec|voir|papa|maman|copines|maîtresse/i.test(it.say)) it.next = withWho; }); });
   const vaisAfter = { title: 'Et après, je vais…', items: vaisItems };

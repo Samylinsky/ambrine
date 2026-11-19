@@ -66,9 +66,11 @@ function updateVoiceWarn() {
   if (st.level === 'none' && !S.voiceWarnClosed) { w.hidden = false; w.textContent = '⚠ Pas de voix française : la phrase s’affichera en grand. (toucher pour fermer)'; }
   else w.hidden = true;
 }
+/* longue histoire : pendant qu'on construit, on montre seulement les 2 dernières phrases (les choix restent visibles) */
+function lastBits(t) { const p = t.split(/(?<=\.) /); return p.length > 2 ? '… ' + p.slice(-2).join(' ') : t; }
 function sentenceText(words) {
   const t = words.map((w, i) => w.say != null ? w.say : (i === 0 ? w.label : w.label.charAt(0).toLowerCase() + w.label.slice(1))).join(' ');
-  const r = t.replace(/\s+/g, ' ').replace(/ ,/g, ',').replace(/,(\s*,)+/g, ',').replace(/,?\s*\.\s*/g, '. ').replace(/\. ([a-zàâéèêîôûç])/g, (m, l) => '. ' + l.toUpperCase()).replace(/ et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines)(?= et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines))/g, ', $1').trim();
+  const r = t.replace(/\s+/g, ' ').replace(/ ,/g, ',').replace(/,(\s*,)+/g, ',').replace(/,?\s*\.\s*/g, '. ').replace(/ et ((?:à|au|aux|j’ai) [^,.]*?)(?= et (?:à|au|aux|j’ai) )/g, ', $1').replace(/\. ([a-zàâéèêîôûç])/g, (m, l) => '. ' + l.toUpperCase()).replace(/ et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines)(?= et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines))/g, ', $1').trim();
   return r.charAt(0).toUpperCase() + r.slice(1);
 }
 function speak(text, big = false) {
@@ -524,7 +526,7 @@ function renderPhrases() {
     go('home'); return;
   }
   const cur = f.stack[f.stack.length - 1].node;
-  const head = h('div', 'flowHead'); head.append(h('div', 'flowSentence', S.words.length ? (f.done ? endP(sentenceText(S.words)) : sentenceText(S.words) + ' …') : cur.title));
+  const head = h('div', 'flowHead'); head.append(h('div', 'flowSentence', S.words.length ? (f.done ? endP(sentenceText(S.words)) : lastBits(sentenceText(S.words)) + ' …') : cur.title));
   v.append(head);
   const bar = h('div', 'row flowBar');
   const back = h('button', 'btn', '⬅ Retour'); back.onclick = flowBack;

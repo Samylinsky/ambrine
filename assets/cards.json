@@ -616,6 +616,13 @@
   "style": "photo"
  },
  {
+  "id": 166,
+  "label": "Hamburger",
+  "category": "Nourriture",
+  "section": "nourriture",
+  "emoji": "🍔"
+ },
+ {
   "id": 60,
   "label": "Chocolat",
   "category": "Nourriture",

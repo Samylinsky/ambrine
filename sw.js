@@ -1,4 +1,4 @@
-const CORE = 'ambrine-core-v43', VID = 'ambrine-signes-v1';
+const CORE = 'ambrine-core-v44', VID = 'ambrine-signes-v1';
 const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'flows.js', 'anim.js', 'test-animations.html', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png', 'assets/cards.json', 'assets/signs.json', 'assets/anim/index.json', 'assets/video/ambrine_coucou.mp4', 'assets/video/ambrine_salut.mp4', 'assets/cards/ambrine_coucou_poster.jpg'];
 self.addEventListener('install', e => e.waitUntil((async () => {
   const c = await caches.open(CORE);
@@ -26,7 +26,7 @@ self.addEventListener('fetch', e => {
   const isCore = req.mode === 'navigate' || /\.(html|js|css|json|webmanifest)$/.test(url.pathname);
   e.respondWith((async () => {
     const c = await caches.open(CORE);
-    if (isCore) { try { const r = await fetch(req); if (r.ok) c.put(req, r.clone()); return r; } catch (err) { return (await c.match(req, { ignoreSearch: true })) || (await c.match('index.html')); } }
+    if (isCore) { try { const r = await fetch(req, { cache: 'no-cache' }); if (r.ok) c.put(req, r.clone()); return r; } catch (err) { return (await c.match(req, { ignoreSearch: true })) || (await c.match('index.html')); } }
     const hit = await c.match(req); if (hit) return hit;
     try { const r = await fetch(req); if (r.ok) c.put(req, r.clone()); return r; } catch (err) { return new Response('', { status: 503 }); }
   })());

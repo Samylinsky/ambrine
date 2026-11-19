@@ -68,7 +68,7 @@ function updateVoiceWarn() {
 }
 function sentenceText(words) {
   const t = words.map((w, i) => w.say != null ? w.say : (i === 0 ? w.label : w.label.charAt(0).toLowerCase() + w.label.slice(1))).join(' ');
-  const r = t.replace(/\s+/g, ' ').replace(/ ,/g, ',').replace(/,(\s*,)+/g, ',').replace(/ et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines)(?= et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines))/g, ', $1').trim();
+  const r = t.replace(/\s+/g, ' ').replace(/ ,/g, ',').replace(/,(\s*,)+/g, ',').replace(/,?\s*\.\s*/g, '. ').replace(/\. ([a-zàâéèêîôûç])/g, (m, l) => '. ' + l.toUpperCase()).replace(/ et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines)(?= et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines))/g, ', $1').trim();
   return r.charAt(0).toUpperCase() + r.slice(1);
 }
 function speak(text, big = false) {
@@ -416,10 +416,14 @@ function startersFor(card) {
       return;
     }
     if (r.key === 'raconte') {      // aujourd'hui → où → (passer) → quoi
-      const when = r.node, today = when.items[0], where = today.next;
-      const w = where.items.find(it => norm(it.c.label) === L); if (w) add(r, [today, w]);
-      const skip = where.items.find(it => it.next && it.say === '' && norm(it.c.label) === 'passer');
-      if (skip) { const d = skip.next.items.find(it => norm(it.c.label) === L); if (d) add(r, [today, skip, d]); }
+      // aujourd'hui → comment (passer) → avec qui (passer) → où → quoi
+      const when = r.node, today = when.items[0], how = today.next;
+      const sk = n => n && n.items.find(it => it.next && it.say === '' && norm(it.c.label) === 'passer');
+      const s1 = sk(how), who = s1 && s1.next, s2 = sk(who), where = s2 && s2.next;
+      if (where) {
+        const w = where.items.find(it => norm(it.c.label) === L); if (w) add(r, [today, s1, s2, w]);
+        const s3 = sk(where); if (s3) { const d = s3.next.items.find(it => norm(it.c.label) === L); if (d && !cap()) add(r, [today, s1, s2, s3, d]); }
+      }
       return;
     }
     const found = [];

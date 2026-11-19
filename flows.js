@@ -157,7 +157,11 @@ function buildFlows(find) {
     I('Musique', 'chanter'), I('Dessiner', 'dessiner'), I(JOUER, 'jouer')]);
   const how = act => ({ title: 'Comment j’y vais ?', items: [
     I('Bus', 'en bus', act), I('Voiture', 'en voiture', act), I('À pied', 'à pied', act), I({ label: 'Passer', emoji: '⏭️' }, '', act)] });
+  const psyAct = act('Chez la psychomotricienne, pour…', [
+    I({ label: 'Le pont', emoji: '🌉' }, 'marcher sur le pont'), I({ label: 'Équilibre', emoji: '🤸‍♀️' }, 'faire de l’équilibre'), I({ label: 'Sauter', emoji: '🦘' }, 'sauter'),
+    I({ label: 'Grimper', emoji: '🧗‍♀️' }, 'grimper'), I('Ballon', 'jouer au ballon'), I(JOUER, 'jouer')]);
   const vaisItems = [
+    I({ label: 'Psychomotricienne', emoji: '🤸‍♀️' }, 'chez la psychomotricienne', how(psyAct)),
     I('École', 'à l’école', how(ecoleAct)), I('Maison', 'à la maison', how(maisonAct)), I('Parc', 'au parc', how(parcAct)), I('Piscine', 'à la piscine', how(piscAct)),
     I('Magasin', 'au magasin', how(magAct)), I('Restaurant', 'au restaurant', how(restoAct)), I('Jardin', 'dans le jardin', parcAct), I('Aire de jeux', 'à l’aire de jeux', how(parcAct)),
     I('Dehors', 'dehors', parcAct), I('Cantine', 'à la cantine', cantAct), I('Mamie', 'chez mamie', how(famAct)), I('Papi', 'chez papi', how(famAct)),
@@ -206,27 +210,6 @@ function buildFlows(find) {
     I('Dormir', 'j’ai dormi', feelPast), I('Triste', 'j’ai pleuré', feelPast), I('Magasin', 'j’ai fait les courses', feelPast), I('Orthophoniste', 'j’ai travaillé avec l’orthophoniste', feelPast)];
   const did = { title: 'Qu’est-ce que j’ai fait ?', pre: ',', items: didItems };
   const didCont = { title: 'Et après, qu’est-ce que j’ai fait ?', pre: 'et après,', items: didItems };
-  const who = { title: 'Avec qui ?', items: [
-    I('Papa', 'avec papa', did), I('Maman', 'avec maman', did), I('Mamie', 'avec mamie', did), I('Papi', 'avec papi', did),
-    I('Yusuf', 'avec Yusuf', did), I('Nayla', 'avec Nayla', did), I('Copines', 'avec mes copines', did), I('Maîtresse', 'avec la maîtresse', did), I('Mon AESH', 'avec mon AESH', did), I('Orthophoniste', 'avec l’orthophoniste', did),
-    I('Tout le monde', 'avec toute la famille', did), I('Toute seule', 'toute seule', did), SKIP(did)] };
-  const pastTo = title => ({ title, pre: 'pour aller', items: [
-    I('École', 'à l’école', who), I('Piscine', 'à la piscine', who), I('Parc', 'au parc', who), I('Maison', 'à la maison', who),
-    I('Mamie', 'chez mamie', who), I('Papi', 'chez papi', who), I('Magasin', 'au magasin', who), I('Docteur', 'chez le docteur', who),
-    I('Orthophoniste', 'chez l’orthophoniste', who), SKIP(who)] });
-  const pastBus = pastTo('Le bus pour aller où ?'), pastCar = pastTo('La voiture pour aller où ?');
-  const pastHow = { title: 'Comment j’y suis allée ?', items: [
-    I('Bus', 'en bus', who), I('Voiture', 'en voiture', who), I('À pied', 'à pied', who), I({ label: 'Passer', emoji: '⏭️' }, '', who)] };
-  const where = { title: 'Où ?', items: [
-    I('École', 'je suis allée à l’école', pastHow), I('Parc', 'je suis allée au parc', pastHow), I('Piscine', 'je suis allée à la piscine', pastHow),
-    I('Maison', 'je suis restée à la maison', who), I('Mamie', 'je suis allée chez mamie', pastHow), I('Papi', 'je suis allée chez papi', pastHow),
-    I('Magasin', 'je suis allée au magasin', pastHow), I('Jardin', 'je suis allée dans le jardin', who), I('Aire de jeux', 'je suis allée à l’aire de jeux', pastHow),
-    I('Dehors', 'je suis sortie', who), I('Docteur', 'je suis allée chez le docteur', pastHow), I('Orthophoniste', 'je suis allée chez l’orthophoniste', pastHow), I('Voiture', 'je suis partie en voiture', pastCar), I('Bus', 'j’ai pris le bus', pastBus), SKIP(did)] };
-  const when = { title: 'Quand ?', items: [
-    I('Aujourd’hui', 'aujourd’hui,', where, { replace: true }), I('Hier', 'hier,', where, { replace: true }),
-    I('Ce matin', 'ce matin,', where, { replace: true }), I('Cet après-midi', 'cet après-midi,', where, { replace: true }),
-    I('Ce soir', 'ce soir,', where, { replace: true }), I('Ce week-end', 'ce week-end,', where, { replace: true })] };
-
   /* ---- ma journée d'école (gardée) ---- */
   const feelSchool = { title: 'Et comment j’étais ?', pre: 'et', items: feelPast.items };
   const school = { title: 'À l’école, qu’est-ce que j’ai fait ?', items: [
@@ -236,6 +219,67 @@ function buildFlows(find) {
     I('Sport', 'j’ai fait du sport', feelSchool), I('Musique', 'j’ai écouté de la musique', feelSchool), I('Maîtresse', 'j’ai vu la maîtresse', feelSchool),
     I('Triste', 'j’ai pleuré', feelSchool)] };
   const schoolCont = { title: 'Et après, qu’est-ce que j’ai fait ?', pre: 'et après,', items: school.items };
+
+  /* Je raconte, dans l'ordre d'une vraie phrase :
+     Quand → Comment (voiture, bus, à pied) → Avec qui (plusieurs) → Où → Qu'est-ce que j'ai fait (selon l'endroit) → Comment j'étais
+     « Aujourd'hui, je suis partie en voiture avec maman chez la psychomotricienne. J'ai marché sur le pont et j'étais contente. » */
+  const PSY = { label: 'Psychomotricienne', emoji: '🤸‍♀️' };
+  const pastAct = (title, items) => ({ title, pre: '.', items: items.map(([c, s]) => I(c, s, feelPast)) });
+  const psyDid = pastAct('Chez la psychomotricienne, qu’est-ce que j’ai fait ?', [
+    [{ label: 'Le pont', emoji: '🌉' }, 'j’ai marché sur le pont'], [{ label: 'Équilibre', emoji: '🤸‍♀️' }, 'j’ai fait de l’équilibre'],
+    [{ label: 'Sauter', emoji: '🦘' }, 'j’ai sauté'], [{ label: 'Grimper', emoji: '🧗‍♀️' }, 'j’ai grimpé'],
+    ['Ballon', 'j’ai joué au ballon'], ['Puzzle', 'j’ai fait un puzzle'], ['Dessiner', 'j’ai dessiné'], [JOUER, 'j’ai joué']]);
+  const schoolDid = { title: 'À l’école, qu’est-ce que j’ai fait ?', pre: '.', items: school.items };
+  const parcDid = pastAct('Au parc, qu’est-ce que j’ai fait ?', [
+    ['Balançoire', 'j’ai fait de la balançoire'], ['Toboggan', 'j’ai fait du toboggan'], ['Ballon', 'j’ai joué au ballon'], ['Vélo', 'j’ai fait du vélo'],
+    [{ label: 'Courir', emoji: '🏃‍♀️' }, 'j’ai couru'], ['Copines', 'j’ai joué avec mes copines'], ['Glace', 'j’ai mangé une glace'], [JOUER, 'j’ai joué']]);
+  const piscDid = pastAct('À la piscine, qu’est-ce que j’ai fait ?', [
+    ['Nager', 'j’ai nagé'], [JOUER, 'j’ai joué dans l’eau'], ['Toboggan', 'j’ai fait du toboggan']]);
+  const famDid = pastAct('Qu’est-ce que j’ai fait ?', [
+    [JOUER, 'j’ai joué'], ['Manger', 'j’ai mangé'], ['Gâteau', 'j’ai mangé du gâteau'], ['Télé', 'j’ai regardé la télé'], ['iPad', 'j’ai joué à l’iPad'],
+    ['Dessiner', 'j’ai dessiné'], ['Un câlin', 'j’ai fait un câlin'], ['Cadeau', 'j’ai eu un cadeau']]);
+  const magDid = pastAct('Au magasin, qu’est-ce que j’ai fait ?', [
+    ['Magasin', 'j’ai fait les courses'], ['Cadeau', 'j’ai eu un cadeau'], ['Bonbons', 'j’ai eu des bonbons'], ['Gâteau', 'j’ai eu un gâteau'], ['Glace', 'j’ai eu une glace']]);
+  const docDid = pastAct('Chez le docteur…', [
+    ['Malade', 'j’étais malade'], ['J’ai mal au ventre', 'j’avais mal au ventre'], ['J’ai mal à la tête', 'j’avais mal à la tête'],
+    ['Oreille', 'j’avais mal à l’oreille'], ['Dents', 'j’avais mal aux dents'], ['Gorge', 'j’avais mal à la gorge']]);
+  const orthoDid = pastAct('Chez l’orthophoniste, qu’est-ce que j’ai fait ?', [
+    ['Je raconte', 'j’ai appris à parler'], ['Puzzle', 'j’ai fait des jeux'], ['Regarde !', 'j’ai regardé des images'], ['Lire', 'j’ai lu une histoire'],
+    ['Musique', 'j’ai chanté'], ['Dessiner', 'j’ai dessiné'], [JOUER, 'j’ai joué']]);
+  const restoDid = pastAct('Au restaurant, qu’est-ce que j’ai mangé ?', [
+    ['Pizza', 'j’ai mangé de la pizza'], ['Frites', 'j’ai mangé des frites'], ['Pâtes', 'j’ai mangé des pâtes'], ['Viande', 'j’ai mangé de la viande'],
+    ['Glace', 'j’ai mangé une glace'], ['Gâteau', 'j’ai mangé du gâteau'], ['Manger', 'j’ai mangé']]);
+  const didDot = { title: 'Qu’est-ce que j’ai fait ?', pre: '.', items: didItems };
+  /* Où ? — v = '' après « je suis partie en voiture », v = 'je suis allée' si on a passé « Comment » */
+  const pastWhere = v => {
+    const P = (c, s, next) => I(c, (v ? v + ' ' : '') + s, next);
+    return { title: 'Où ?', items: [
+      P(PSY, 'chez la psychomotricienne', psyDid), P('École', 'à l’école', schoolDid), P('Parc', 'au parc', parcDid), P('Piscine', 'à la piscine', piscDid),
+      P('Mamie', 'chez mamie', famDid), P('Papi', 'chez papi', famDid), P('Orthophoniste', 'chez l’orthophoniste', orthoDid), P('Docteur', 'chez le docteur', docDid),
+      P('Magasin', 'au magasin', magDid), P('Restaurant', 'au restaurant', restoDid), P('Aire de jeux', 'à l’aire de jeux', parcDid), P('Maison', 'à la maison', didDot),
+      I({ label: 'Passer', emoji: '⏭️' }, '', v ? did : didDot)] };
+  };
+  /* Avec qui ? — on peut choisir plusieurs personnes, puis ➡️ pour continuer */
+  const pastWho = next => {
+    const GO = I({ label: 'Continuer', emoji: '➡️' }, '', next);
+    const more = { title: 'Et qui encore ?', hideUsed: true, items: [] };
+    const ppl = [['Papa', 'papa'], ['Maman', 'maman'], ['Yusuf', 'Yusuf'], ['Nayla', 'Nayla'], ['Mamie', 'mamie'], ['Papi', 'papi'], ['Copines', 'mes copines']];
+    more.items = ppl.map(([c, s]) => I(c, 'et ' + s, more)).concat([GO]);
+    return { title: 'Avec qui ?', items: ppl.map(([c, s]) => I(c, 'avec ' + s, more)).concat([
+      I({ label: 'Toute la famille', image: 'assets/cards/famille_tous.webp', style: 'photo' }, 'avec toute la famille', next),
+      I('Maîtresse', 'avec la maîtresse', next), I('Mon AESH', 'avec mon AESH', next),
+      I({ label: 'Toute seule', emoji: '🙋‍♀️' }, 'toute seule', next), I({ label: 'Passer', emoji: '⏭️' }, '', next)]) };
+  };
+  const whereGo = pastWhere(''), whereVerb = pastWhere(', je suis allée');
+  const whoGo = pastWho(whereGo), whoVerb = pastWho(whereVerb), whoHome = pastWho(didDot);
+  const pastHowFirst = { title: 'Comment je suis partie ?', items: [
+    I('Voiture', 'je suis partie en voiture', whoGo), I('Bus', 'je suis partie en bus', whoGo), I('À pied', 'je suis partie à pied', whoGo),
+    I('Maison', 'je suis restée à la maison', whoHome), I({ label: 'Passer', emoji: '⏭️' }, '', whoVerb)] };
+  const where = pastHowFirst;
+  const when = { title: 'Quand ?', items: [
+    I('Aujourd’hui', 'aujourd’hui,', where, { replace: true }), I('Hier', 'hier,', where, { replace: true }),
+    I('Ce matin', 'ce matin,', where, { replace: true }), I('Cet après-midi', 'cet après-midi,', where, { replace: true }),
+    I('Ce soir', 'ce soir,', where, { replace: true }), I('Ce week-end', 'ce week-end,', where, { replace: true })] };
 
   /* ================= JE DEMANDE (à qui, puis quoi) ================= */
   const ask = { title: 'Je demande…', items: [

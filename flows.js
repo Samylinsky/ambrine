@@ -287,10 +287,6 @@ function buildFlows(find) {
   const GO = next => I({ label: 'Continuer', emoji: '➡️' }, '', next);
   const PASS = next => I({ label: 'Passer', emoji: '⏭️' }, '', next);
   const DAY_PPL = [['Maman', 'maman'], ['Papa', 'papa'], ['Mamie', 'mamie'], ['Papi', 'papi'], ['Yusuf', 'Yusuf'], ['Nayla', 'Nayla'], ['Copines', 'mes copines']];
-  const dayFeel = next => ({ title: 'Comment j’étais ?', pre: '.', items: [
-    I('Contente', 'j’étais contente', next), I('Très contente', 'j’étais très contente', next), I('Calme', 'j’étais calme', next),
-    I('Triste', 'j’étais triste', next), I('Énervée', 'j’étais énervée', next), I('Fatiguée', 'j’étais fatiguée', next), I('Peur', 'j’avais peur', next),
-    PASS(next)] });
   /* plusieurs choix : le 1er choix, puis « et … » jusqu'à ➡️ Continuer */
   const multi = (title, pre, list, next, moreTitle) => {
     const more = { title: moreTitle || 'Et quoi encore ?', hideUsed: true, items: [] };
@@ -305,29 +301,59 @@ function buildFlows(find) {
   };
   const travel = (title, pre, next) => ({ title, pre, items: [
     I('Bus', 'en bus', dayWho(next)), I('Voiture', 'en voiture', dayWho(next)), I('À pied', 'à pied', dayWho(next)), PASS(dayWho(next))] });
-  const CLASS = [['En classe', 'j’ai travaillé'], ['Lire', 'j’ai lu'], ['Dessiner', 'j’ai dessiné'], ['Puzzle', 'j’ai fait un puzzle'],
-    ['Musique', 'j’ai fait de la musique'], ['Danser', 'j’ai dansé'], ['Jouer aux blocs', 'j’ai joué aux blocs'], ['iPad', 'j’ai utilisé l’iPad'],
-    ['Maîtresse', 'j’ai travaillé avec la maîtresse'], ['Mon AESH', 'j’ai travaillé avec mon AESH']];
+  const ULIS = { label: 'Classe ULIS', emoji: '🏫' };
+  const CLASS = [[ULIS, 'j’ai travaillé en ULIS'], ['En classe', 'j’ai travaillé'], ['Lire', 'j’ai lu'], ['Dessiner', 'j’ai dessiné'], ['Puzzle', 'j’ai fait un puzzle'],
+    ['Musique', 'j’ai fait de la musique'], ['Danser', 'j’ai dansé'], ['Jouer aux blocs', 'j’ai joué aux blocs'], ['Construire', 'j’ai construit'], ['iPad', 'j’ai utilisé l’iPad'],
+    ['Maîtresse', 'j’ai travaillé avec la maîtresse'], ['Copines', 'j’ai travaillé avec mes copines']];
+  const CLASS_PM = CLASS.concat([['Sport', 'j’ai fait du sport'], ['Piscine', 'je suis allée à la piscine'], ['Nager', 'j’ai nagé']]);
   const GAMES = [[{ label: 'Corde à sauter', emoji: '🪢' }, 'à la corde à sauter'], ['Toboggan', 'au toboggan'], ['Balançoire', 'à la balançoire'],
     ['Ballon', 'au ballon'], [{ label: 'Cache-cache', emoji: '🙈' }, 'à cache-cache'], [{ label: 'Courir', emoji: '🏃‍♀️' }, 'à la course'],
     [{ label: 'Le loup', emoji: '🐺' }, 'au loup'], ['Bulles', 'aux bulles']];
   const recre = (next, label) => {
-    const games = multi('À quoi j’ai joué ?', '', GAMES, dayFeel(next), 'À quoi encore ?');
-    return { title: label + ' : avec qui j’ai joué ?', pre: '. ' + label.toLowerCase() + ',', items: [
+    const games = multi('À quoi j’ai joué ?', '', GAMES, next, 'À quoi encore ?');
+    return { title: '🛝 ' + label + ' : avec qui j’ai joué ?', pre: '. ' + label.toLowerCase() + ',', items: [
       I('Copines', 'j’ai joué avec mes copines', games), I({ label: 'Toute seule', emoji: '🙋‍♀️' }, 'j’ai joué toute seule', games),
       I('Maîtresse', 'j’ai joué avec la maîtresse', games), I(JOUER, 'j’ai joué', games), PASS(next)] };
   };
-  const evening = travel('Le soir, comment je suis rentrée à la maison ?', '. le soir, je suis rentrée à la maison', null);
-  const recreAm = recre(evening, 'À la récréation de l’après-midi');
-  const pmClass = multi('L’après-midi, qu’est-ce que j’ai fait ?', '. l’après-midi,', CLASS.concat([
-    ['Sport', 'j’ai fait du sport'], ['Piscine', 'je suis allée à la piscine'], ['Nager', 'j’ai nagé']]), dayFeel(recreAm));
-  const backSchool = travel('Comment je suis retournée à l’école ?', '. ensuite, je suis retournée à l’école', pmClass);
-  const lunchList = meals.items.map(it => [it.c.label, it.say]);
-  const lunch = multi('🍽️ À midi, qu’est-ce que j’ai mangé ?', '. j’ai mangé', lunchList, dayFeel(backSchool));
-  const noon = travel('À midi, comment je suis rentrée à la maison ?', '. à midi, je suis rentrée à la maison', lunch);
-  const recreM = recre(noon, 'À la récréation');
-  const amClass = multi('Le matin, en classe, qu’est-ce que j’ai fait ?', '. le matin, en classe,', CLASS, dayFeel(recreM));
-  const arrive = travel('Comment je suis allée à l’école ?', 'je suis allée à l’école', amClass);
+  /* le soir, à la maison : comment j'étais ? → POURQUOI ? → et encore ? */
+  const WHY_GOOD = [['C’était bien', 'c’était bien'], [JOUER, 'j’ai joué'], ['Copines', 'j’ai joué avec mes copines'], ['Toboggan', 'j’ai fait du toboggan'],
+    ['Maîtresse', 'la maîtresse était gentille'], ['Manger', 'j’ai bien mangé'], ['Maman', 'j’ai vu maman'], ['Papa', 'j’ai vu papa'], ['Cadeau', 'j’ai eu un cadeau']];
+  const WHY_BAD = [['Trop de bruit', 'il y avait trop de bruit'], ['Trop de monde', 'il y avait trop de monde'], ['On m’embête', 'on m’a embêtée'],
+    ['Toute seule', 'j’étais toute seule'], ['J’ai mal au ventre', 'j’avais mal'], ['Malade', 'j’étais malade'], ['Copines', 'mes copines n’étaient pas là'],
+    ['Ce n’était pas bien', 'ce n’était pas bien'], ['Je ne comprends pas', 'je n’ai pas compris']];
+  const WHY_TIRED = [[JOUER, 'j’ai beaucoup joué'], ['En classe', 'j’ai beaucoup travaillé'], ['École', 'la journée était longue'], ['Dormir', 'j’ai mal dormi'],
+    ['Trop de bruit', 'il y avait trop de bruit']];
+  const feelMore = { title: 'Et encore ?', items: [] };
+  const why = (title, list) => ({ title: 'Pourquoi ' + title + ' ?', pre: 'parce que', items: list.map(([c, s]) => I(c, s, feelMore)).concat([PASS(feelMore)]) });
+  const EMO = [
+    ['Contente', 'j’étais contente', why('j’étais contente', WHY_GOOD)], ['Très contente', 'j’étais très contente', why('j’étais très contente', WHY_GOOD)],
+    [{ label: 'Bonne journée', emoji: '🌟' }, 'j’ai passé une bonne journée', why('c’était une bonne journée', WHY_GOOD)],
+    ['Fatiguée', 'j’étais fatiguée', why('j’étais fatiguée', WHY_TIRED)], ['Calme', 'j’étais calme', null],
+    [{ label: 'Pas contente', emoji: '😞' }, 'je n’étais pas contente', why('je n’étais pas contente', WHY_BAD)],
+    ['Triste', 'j’étais triste', why('j’étais triste', WHY_BAD)], ['Énervée', 'j’étais énervée', why('j’étais énervée', WHY_BAD)],
+    ['Peur', 'j’ai eu peur', why('j’ai eu peur', WHY_BAD)]];
+  feelMore.items = EMO.map(([c, s, n]) => I(c, 'et ' + s, n || feelMore)).concat([I({ label: 'C’est tout', emoji: '✅' }, '')]);
+  feelMore.hideUsed = true;
+  const endFeel = { title: '🏠 À la maison, comment j’étais ?', pre: '.', items: EMO.map(([c, s, n]) => I(c, s, n || feelMore)).concat([I({ label: 'C’est tout', emoji: '✅' }, '')]) };
+  /* LA JOURNÉE, dans l'ordre */
+  const evening = travel('🌙 Le soir, comment je suis rentrée à la maison ?', '. le soir, je suis rentrée à la maison', endFeel);
+  const pmClass2 = multi('🏫 Après la récré, en classe, qu’est-ce que j’ai fait ?', '. après la récréation,', CLASS_PM, evening);
+  const recreA = recre(pmClass2, 'À la récréation de l’après-midi');
+  const pmClass = multi('🏫 L’après-midi, en classe, qu’est-ce que j’ai fait ?', '. l’après-midi, en classe,', CLASS_PM, recreA);
+  const backSchool = travel('🚌 Comment je suis retournée à l’école ?', '. ensuite, je suis retournée à l’école', pmClass);
+  const homeAct = multi('🏠 Avant de repartir, qu’est-ce que j’ai fait à la maison ?', '. après,', [
+    ['Télé', 'j’ai regardé la télé'], ['iPad', 'j’ai joué à l’iPad'], [JOUER, 'j’ai joué'], ['Yusuf', 'j’ai joué avec Yusuf'], ['Nayla', 'j’ai joué avec Nayla'],
+    ['Dessiner', 'j’ai dessiné'], ['Puzzle', 'j’ai fait un puzzle'], ['Me reposer', 'je me suis reposée'], ['Un câlin', 'j’ai fait un câlin']], backSchool);
+  const DESS = ['Yaourt', 'Glace', 'Gâteau', 'Fruits', 'Pomme', 'Banane', 'Chocolat', 'Biscuit', 'Fromage'];
+  const dessertL = { title: '🍨 Le dessert ?', pre: '. en dessert, j’ai mangé', items: DESS.map(n => I(n, SAY[n], homeAct)).concat([I({ label: 'Rien', emoji: '🚫' }, '', homeAct)]) };
+  const drinkL = { title: '🥤 Qu’est-ce que j’ai bu ?', pre: '. j’ai bu', items: ['Eau', 'Jus', 'Lait'].map(n => I(n, SAY[n], dessertL)).concat([I({ label: 'Rien', emoji: '🚫' }, '', dessertL)]) };
+  const MAINS = meals.items.filter(it => it.c && !DESSERTS.includes(it.c.label)).map(it => [it.c.label, it.say]);
+  const lunch = multi('🍽️ À midi, qu’est-ce que j’ai mangé ?', '. j’ai mangé', MAINS, drinkL);
+  const noon = travel('🚌 À midi, comment je suis rentrée à la maison ?', '. à midi, je suis rentrée à la maison', lunch);
+  const amClass2 = multi('🏫 Après la récré, en classe, qu’est-ce que j’ai fait ?', '. après la récréation,', CLASS, noon);
+  const recreM = recre(amClass2, 'À la récréation');
+  const amClass = multi('🏫 Le matin, en classe, qu’est-ce que j’ai fait ?', '. le matin, en classe,', CLASS, recreM);
+  const arrive = travel('🚌 Comment je suis allée à l’école ?', 'je suis allée à l’école', amClass);
   /* ================= JE DEMANDE (à qui, puis quoi) ================= */
   const ask = { title: 'Je demande…', items: [
     I('Bonjour', 'bonjour !'), I('Au revoir', 'au revoir !'), I('Merci', 'merci !'), I('Pardon', 'pardon !'), I('Bisou', 'tu me fais un bisou ?'), I('Tu viens ?', 'tu viens ?'), I('Tu joues avec moi ?', 'tu joues avec moi ?'), I('Regarde !', 'regarde !'),

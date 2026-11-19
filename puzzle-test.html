@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>TEST — Le puzzle de ma journée</title>
+<style>
+:root{--qui:#f2b705;--quoi:#3fa34d;--ou:#f07f1a;--emo:#3b7ddd;--pq:#8a56c2;--bg:#faf7ff;--line:#e6dcf5;--ink:#2d2340}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);user-select:none;-webkit-user-select:none}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-bottom:2px solid var(--line);position:sticky;top:0;z-index:5}
+header h1{font-size:1.15rem;margin:0;flex:1}
+.test{background:#ffe08a;color:#6b4b00;border-radius:8px;padding:2px 8px;font-size:.8rem;margin-left:6px}
+.hb{border:2px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;font-weight:700;font-size:.95rem}
+.hb.primary{background:#8a56c2;color:#fff;border-color:#8a56c2}
+/* frise */
+#frise{display:flex;gap:6px;overflow-x:auto;padding:12px 14px 8px;scroll-behavior:smooth}
+.mp{flex:0 0 auto;width:92px;border-radius:14px;background:#fff;border:3px solid #ddd;padding:4px;text-align:center;position:relative;transition:transform .2s}
+.mp .ic{height:52px;display:flex;align-items:center;justify-content:center;font-size:2rem;border-radius:10px;overflow:hidden;background:#f3f0f8}
+.mp .ic img{width:100%;height:100%;object-fit:cover}
+.mp .lb{font-size:.72rem;font-weight:800;line-height:1.1;margin-top:3px;min-height:2.2em}
+.mp.todo{opacity:.45;filter:grayscale(.8)}
+.mp.next{opacity:1;filter:none;border-color:#ffd45e;box-shadow:0 0 0 4px #ffe9a3;animation:glow 1.4s ease-in-out infinite}
+.mp.done{border-color:#8a56c2}
+.mp.done::after{content:"✔";position:absolute;top:-8px;right:-6px;background:#8a56c2;color:#fff;border-radius:50%;width:24px;height:24px;font-size:14px;line-height:24px}
+.mp.skip{opacity:.5;border-style:dashed}
+.mp.skip::after{content:"⏭";position:absolute;top:-8px;right:-6px;background:#999;color:#fff;border-radius:50%;width:24px;height:24px;font-size:12px;line-height:24px}
+.mp.active{transform:translateY(-6px);border-color:#ffb300}
+.mp.star{border-color:#ffb300;background:#fff8e1}
+.mp.extra{border-color:#2aa7a7}
+.mp.reading{box-shadow:0 0 0 5px #8a56c2}
+.mp.shake{animation:shake .4s}
+.mp.snap{animation:snap .6s}
+@keyframes glow{50%{box-shadow:0 0 0 8px #ffe9a3}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes snap{0%{transform:scale(1.3) rotate(-6deg)}60%{transform:scale(.92)}100%{transform:scale(1)}}
+#tools{display:flex;gap:10px;padding:0 14px 10px}
+.big{flex:1;border:3px solid;border-radius:16px;padding:10px;font-size:1.05rem;font-weight:800;background:#fff;display:flex;align-items:center;justify-content:center;gap:8px}
+.big.star{border-color:#ffb300;background:#fff8e1}.big.add{border-color:#2aa7a7;background:#e8f7f7}
+/* éditeur */
+#editor{margin:0 14px 14px;background:#fff;border-radius:18px;border:2px solid var(--line);padding:12px}
+#editor h2{margin:2px 0 10px;font-size:1.3rem}
+.slots{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.slot{width:96px;min-height:104px;border-radius:14px;border:3px dashed var(--c);background:color-mix(in srgb,var(--c) 10%,#fff);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:4px}
+.slot .ico{font-size:1.8rem}.slot .nm{font-size:.75rem;font-weight:800;text-align:center}
+.slot.cur{border-style:solid;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 35%,transparent);animation:glow2 1.4s infinite}
+@keyframes glow2{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--c) 25%,transparent)}}
+.slot.full{border-style:solid;background:#fff}
+.slot img{width:100%;height:62px;object-fit:cover;border-radius:8px}
+.slot .em{font-size:2.4rem;height:62px;display:flex;align-items:center}
+.slot .x{position:absolute;top:-10px;right:-10px;width:28px;height:28px;border-radius:50%;background:#e2483d;color:#fff;font-weight:900;line-height:28px;text-align:center;font-size:15px}
+.slot.skipped{opacity:.4}
+.ask{display:flex;align-items:center;gap:10px;margin:4px 0 10px;font-size:1.2rem;font-weight:800}
+.ask .dot{width:34px;height:34px;border-radius:50%;background:var(--c);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:12px}
+.tile{border:4px solid var(--c);border-radius:16px;background:#fff;padding:5px;text-align:center;font-weight:800;font-size:.95rem}
+.tile .art{height:96px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:3rem;background:#f6f3fa}
+.tile .art img{width:100%;height:100%;object-fit:cover}
+.tile.ctl{border-style:dashed;border-color:#aaa;color:#555}.tile.go{border-color:#8a56c2;background:#f3ecfb}
+.tile:active{transform:scale(.95)}
+.hint{font-size:.95rem;color:#6a5d80;margin:6px 0 0}
+#say{margin:0 14px 10px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px 14px;font-size:1.25rem;font-weight:800;color:#5a3a8a;min-height:56px}
+#readbar{display:none;margin:0 14px 14px;gap:10px}
+#readbar.on{display:flex}
+dialog{border:none;border-radius:18px;padding:18px;max-width:420px;width:90%}
+dialog::backdrop{background:rgba(40,20,70,.45)}
+.lv{display:block;width:100%;text-align:left;margin:8px 0;padding:12px;border-radius:12px;border:3px solid var(--line);background:#fff;font-size:1rem}
+.lv.on{border-color:#8a56c2;background:#f3ecfb}
+.legend{display:flex;gap:12px;flex-wrap:wrap;padding:0 14px 6px;font-size:.8rem;font-weight:700}
+.legend span{display:flex;align-items:center;gap:4px}.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+#big{position:fixed;inset:0;background:#fff;z-index:20;display:none;align-items:center;justify-content:center;padding:30px;font-size:2.2rem;font-weight:900;color:#5a3a8a;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>🧩 Le puzzle de ma journée <span class="test">TEST</span></h1>
+  <button class="hb primary" id="bRead">🔊 Raconter</button>
+  <button class="hb" id="bNew">🔄</button>
+  <button class="hb" id="bLevel">⚙️ Niveau 1</button>
+</header>
+<div class="legend">
+  <span><i style="background:var(--qui)"></i>👤 Qui</span><span><i style="background:var(--quoi)"></i>✋ Quoi</span>
+  <span><i style="background:var(--ou)"></i>📍 Où / comment</span><span><i style="background:var(--emo)"></i>😊 Émotion</span><span><i style="background:var(--pq)"></i>💬 Pourquoi</span>
+</div>
+<div id="frise"></div>
+<div id="tools">
+  <button class="big star" id="bStar">⭐ Il s'est passé quelque chose !</button>
+  <button class="big add" id="bAdd">➕ Un autre moment</button>
+</div>
+<div id="say"></div>
+<div id="readbar"><button class="big" id="bNext">▶️ Suivant</button><button class="big" id="bStop">⏹ Arrêter</button></div>
+<div id="editor"></div>
+<div id="big"></div>
+<dialog id="dLevel">
+  <h3 style="margin-top:0">Aide (réglage parents)</h3>
+  <button class="lv" data-l="1"><b>Niveau 1</b> — seule la pièce suivante s'ouvre.</button>
+  <button class="lv" data-l="2"><b>Niveau 2</b> — la pièce suivante brille, mais toutes s'ouvrent. L'appli remet dans l'ordre.</button>
+  <button class="lv" data-l="3"><b>Niveau 3</b> — tout est libre. L'appli remet dans l'ordre.</button>
+  <button class="hb" onclick="this.closest('dialog').close()">Fermer</button>
+</dialog>
+<script>
+'use strict';
+/* ====================== données ====================== */
+const COL = { qui: 'var(--qui)', quoi: 'var(--quoi)', ou: 'var(--ou)', emo: 'var(--emo)', pq: 'var(--pq)' };
+const ICO = { qui: '👤', quoi: '✋', ou: '📍', emo: '😊', pq: '💬' };
+const C = (label, say, emoji) => ({ label, say, emoji });
+const HOW = [C('Bus', 'en bus'), C('Voiture', 'en voiture'), C('À pied', 'à pied')];
+const PPL = [C('Maman', 'maman'), C('Papa', 'papa'), C('Yusuf', 'Yusuf'), C('Nayla', 'Nayla'), C('Mamie', 'mamie'), C('Papi', 'papi'), C('Copines', 'mes copines'), C('Toute seule', '#seule', '🙋‍♀️')];
+const CLASS = [C('Classe ULIS', 'j’ai travaillé en ULIS', '🏫'), C('En classe', 'j’ai travaillé'), C('Lire', 'j’ai lu'), C('Dessiner', 'j’ai dessiné'), C('Puzzle', 'j’ai fait un puzzle'),
+  C('Musique', 'j’ai fait de la musique'), C('Danser', 'j’ai dansé'), C('Jouer aux blocs', 'j’ai joué aux blocs'), C('Construire', 'j’ai construit'), C('iPad', 'j’ai utilisé l’iPad'),
+  C('Maîtresse', 'j’ai travaillé avec la maîtresse')];
+const CLASS_PM = CLASS.concat([C('Sport', 'j’ai fait du sport'), C('Piscine', 'je suis allée à la piscine'), C('Nager', 'j’ai nagé')]);
+const RWHO = [C('Copines', 'avec mes copines'), C('Toute seule', 'toute seule', '🙋‍♀️'), C('Maîtresse', 'avec la maîtresse'), C('Yusuf', 'avec Yusuf'), C('Nayla', 'avec Nayla')];
+const GAMES = [C('Corde à sauter', 'à la corde à sauter', '🪢'), C('Toboggan', 'au toboggan'), C('Balançoire', 'à la balançoire'), C('Ballon', 'au ballon'),
+  C('Cache-cache', 'à cache-cache', '🙈'), C('Courir', 'à la course', '🏃‍♀️'), C('Le loup', 'au loup', '🐺'), C('Bulles', 'aux bulles')];
+const MAINS = [C('Pâtes', 'des pâtes'), C('Pizza', 'de la pizza'), C('Frites', 'des frites'), C('Hamburger', 'un hamburger', '🍔'), C('Couscous', 'du couscous'), C('Riz', 'du riz'),
+  C('Viande', 'de la viande'), C('Poisson', 'du poisson'), C('Légumes', 'des légumes'), C('Soupe', 'de la soupe'), C('Pain', 'du pain')];
+const DRINKS = [C('Eau', 'de l’eau'), C('Jus', 'du jus'), C('Lait', 'du lait')];
+const DESS = [C('Yaourt', 'un yaourt'), C('Glace', 'une glace'), C('Gâteau', 'du gâteau'), C('Fruits', 'des fruits'), C('Pomme', 'une pomme'), C('Banane', 'une banane'), C('Chocolat', 'du chocolat'), C('Biscuit', 'un biscuit')];
+const HOME = [C('Télé', 'j’ai regardé la télé'), C('iPad', 'j’ai joué à l’iPad'), C('Jouer', 'j’ai joué', '🎲'), C('Yusuf', 'j’ai joué avec Yusuf'), C('Nayla', 'j’ai joué avec Nayla'),
+  C('Dessiner', 'j’ai dessiné'), C('Puzzle', 'j’ai fait un puzzle'), C('Me reposer', 'je me suis reposée'), C('Un câlin', 'j’ai fait un câlin')];
+const EMOS = [C('Contente', 'j’étais contente'), C('Très contente', 'j’étais très contente'), C('Bonne journée', 'j’ai passé une bonne journée', '🌟'), C('Fatiguée', 'j’étais fatiguée'),
+  C('Calme', 'j’étais calme'), C('Pas contente', 'je n’étais pas contente', '😞'), C('Triste', 'j’étais triste'), C('Énervée', 'j’étais énervée'), C('Peur', 'j’ai eu peur')];
+const WHY_GOOD = [C('C’était bien', 'c’était bien'), C('Jouer', 'j’ai joué', '🎲'), C('Copines', 'j’ai joué avec mes copines'), C('Maîtresse', 'la maîtresse était gentille'),
+  C('Manger', 'j’ai bien mangé'), C('Maman', 'j’ai vu maman'), C('Papa', 'j’ai vu papa'), C('Cadeau', 'j’ai eu un cadeau')];
+const WHY_BAD = [C('Trop de bruit', 'il y avait trop de bruit'), C('Trop de monde', 'il y avait trop de monde'), C('On m’embête', 'on m’a embêtée'), C('Toute seule', 'j’étais toute seule', '🙋‍♀️'),
+  C('J’ai mal au ventre', 'j’avais mal'), C('Malade', 'j’étais malade'), C('Copines', 'mes copines n’étaient pas là'), C('Ce n’était pas bien', 'ce n’était pas bien'), C('Je ne comprends pas', 'je n’ai pas compris')];
+const WHY_TIRED = [C('Jouer', 'j’ai beaucoup joué', '🎲'), C('En classe', 'j’ai beaucoup travaillé'), C('École', 'la journée était longue'), C('Dormir', 'j’ai mal dormi'), C('Trop de bruit', 'il y avait trop de bruit')];
+const whyFor = e => !e ? WHY_GOOD : ['Fatiguée'].includes(e.label) ? WHY_TIRED : ['Pas contente', 'Triste', 'Énervée', 'Peur'].includes(e.label) ? WHY_BAD : e.label === 'Calme' ? [] : WHY_GOOD;
+const EVENTS = [C('Tombée', 'je suis tombée', '🤕'), C('Bobo', 'je me suis fait mal', '🩹'), C('Pleurer', 'j’ai pleuré', '😢'), C('Dispute', 'je me suis disputée', '😠'),
+  C('Cadeau', 'j’ai eu un cadeau'), C('Anniversaire', 'il y avait un anniversaire'), C('Malade', 'j’étais malade'), C('Nouvelle copine', 'j’ai une nouvelle copine', '👧'),
+  C('Bravo', 'la maîtresse m’a dit bravo', '👏'), C('On m’embête', 'on m’a embêtée')];
+const WHEN = [C('Le matin', 'matin', '🌅'), C('L’après-midi', 'aprem', '🌇')];
+
+/* slot : {k: clé, t: type couleur, q: question, list, multi, opt} */
+const S_ = (k, t, q, list, o) => Object.assign({ k, t, q, list }, o || {});
+const travelSlots = () => [S_('how', 'ou', 'Comment ?', HOW), S_('who', 'qui', 'Avec qui ?', PPL, { multi: true })];
+const joinList = a => a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' et ' + a[a.length - 1];
+const whoTxt = v => { if (!v || !v.length) return ''; if (v.some(x => x.say === '#seule')) return ' toute seule'; return ' avec ' + joinList(v.map(x => x.say)); };
+const verbs = v => joinList((v || []).map(x => x.say));
+const travel = (start) => a => a.how || (a.who && a.who.length) ? start + (a.how ? ' ' + a.how[0].say : '') + whoTxt(a.who) + '.' : '';
+const classS = (start) => a => a.what && a.what.length ? start + ' ' + verbs(a.what) + '.' : '';
+const recreS = (start) => a => (a.who || a.games) ? start + ', j’ai joué' + (a.who ? ' ' + joinList(a.who.map(x => x.say)) : '') + (a.games ? ' ' + joinList(a.games.map(x => x.say)) : '') + '.' : '';
+const recreSlots = () => [S_('who', 'qui', 'Avec qui j’ai joué ?', RWHO, { multi: true }), S_('games', 'quoi', 'À quoi j’ai joué ?', GAMES, { multi: true })];
+
+const MOMENTS = [
+  { id: 'depart', label: 'Je vais à l’école', pic: 'Bus', slots: travelSlots(), say: travel('Ce matin, je suis allée à l’école') },
+  { id: 'classe1', label: 'En classe', pic: 'En classe', slots: [S_('what', 'quoi', 'Qu’est-ce que j’ai fait en classe ?', CLASS, { multi: true })], say: classS('En classe,') },
+  { id: 'recre1', label: 'Récréation', pic: 'Récréation', slots: recreSlots(), say: recreS('À la récréation') },
+  { id: 'classe2', label: 'Après la récré', pic: 'En classe', slots: [S_('what', 'quoi', 'Après la récré, en classe ?', CLASS, { multi: true })], say: classS('Après la récréation,') },
+  { id: 'midi', label: 'Je rentre à midi', pic: 'Maison', slots: travelSlots(), say: travel('À midi, je suis rentrée à la maison') },
+  { id: 'repas', label: 'Le repas', pic: 'Manger', slots: [S_('plat', 'quoi', 'Qu’est-ce que j’ai mangé ?', MAINS, { multi: true }), S_('boire', 'quoi', 'Qu’est-ce que j’ai bu ?', DRINKS), S_('dessert', 'quoi', 'Le dessert ?', DESS)],
+    say: a => [a.plat ? 'J’ai mangé ' + verbs(a.plat) + '.' : '', a.boire ? 'J’ai bu ' + a.boire[0].say + '.' : '', a.dessert ? 'En dessert, j’ai mangé ' + a.dessert[0].say + '.' : ''].filter(Boolean).join(' ') },
+  { id: 'maison', label: 'À la maison', pic: 'Télé', slots: [S_('what', 'quoi', 'À la maison, avant de repartir ?', HOME, { multi: true })], say: classS('Après,') },
+  { id: 'retour', label: 'Je retourne à l’école', pic: 'Bus', slots: travelSlots(), say: travel('Ensuite, je suis retournée à l’école') },
+  { id: 'classe3', label: 'L’après-midi', pic: 'En classe', slots: [S_('what', 'quoi', 'L’après-midi, en classe ?', CLASS_PM, { multi: true })], say: classS('L’après-midi,') },
+  { id: 'recre2', label: 'Récréation', pic: 'Récréation', slots: recreSlots(), say: recreS('À la récréation de l’après-midi') },
+  { id: 'classe4', label: 'Après la récré', pic: 'En classe', slots: [S_('what', 'quoi', 'Après la récré, en classe ?', CLASS_PM, { multi: true })], say: classS('Après la récréation,') },
+  { id: 'soir', label: 'Je rentre le soir', pic: 'Maison', slots: travelSlots(), say: travel('Le soir, je suis rentrée à la maison') },
+  { id: 'emo', label: 'Comment j’étais', pic: 'Contente', emo: true, slots: [S_('e1', 'emo', 'Comment j’étais ?', EMOS), S_('w1', 'pq', 'Pourquoi ?', null), S_('e2', 'emo', 'Et encore ?', EMOS, { opt: true }), S_('w2', 'pq', 'Pourquoi ?', null)],
+    say: a => [a.e1 ? cap(a.e1[0].say) + (a.w1 ? ' parce que ' + a.w1[0].say : '') + (a.e2 ? ' et ' + a.e2[0].say + (a.w2 ? ' parce que ' + a.w2[0].say : '') : '') + '.' : ''].join('') },
+];
+const EXTRAS = [
+  { id: 'x_piscine', label: 'Piscine avec la classe', pic: 'Piscine', list: [C('Nager', 'j’ai nagé'), C('Jouer', 'j’ai joué dans l’eau', '🎲'), C('Toboggan', 'j’ai fait du toboggan')], start: 'je suis allée à la piscine avec la classe' },
+  { id: 'x_sortie', label: 'Sortie avec la classe', pic: 'Dehors', list: [C('Parc', 'je suis allée au parc'), C('Magasin', 'je suis allée au magasin'), C('Bus', 'j’ai pris le bus'), C('Jouer', 'j’ai joué', '🎲')], start: 'je suis allée en sortie avec la classe' },
+  { id: 'x_psy', label: 'Psychomotricienne', emoji: '🤸‍♀️', list: [C('Le pont', 'j’ai marché sur le pont', '🌉'), C('Équilibre', 'j’ai fait de l’équilibre', '🤸‍♀️'), C('Sauter', 'j’ai sauté', '🦘'), C('Grimper', 'j’ai grimpé', '🧗‍♀️'), C('Ballon', 'j’ai joué au ballon')], start: 'je suis allée chez la psychomotricienne' },
+  { id: 'x_ortho', label: 'Orthophoniste', pic: 'Orthophoniste', list: [C('Je raconte', 'j’ai appris à parler'), C('Puzzle', 'j’ai fait des jeux'), C('Lire', 'j’ai lu une histoire'), C('Dessiner', 'j’ai dessiné')], start: 'je suis allée chez l’orthophoniste' },
+  { id: 'x_doc', label: 'Docteur', pic: 'Docteur', list: [C('Malade', 'j’étais malade'), C('J’ai mal au ventre', 'j’avais mal au ventre'), C('J’ai mal à la tête', 'j’avais mal à la tête'), C('Oreille', 'j’avais mal à l’oreille')], start: 'je suis allée chez le docteur' },
+];
+const cap = t => t ? t.charAt(0).toUpperCase() + t.slice(1) : t;
+
+/* ====================== état ====================== */
+let CARDS = {}, st, ed = null, reading = null;
+const today = () => new Date().toISOString().slice(0, 10);
+const KEY = 'puzzle-journee-test';
+const blank = () => ({ date: today(), level: (st && st.level) || 1, ans: {}, status: {}, extra: [] });
+function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { } }
+function load() { try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.date === today()) return s; if (s) return Object.assign(blank(), { level: s.level || 1 }); } catch (e) { } return blank(); }
+
+/* la frise : moments + moments ajoutés + ⭐, toujours dans l'ordre de la journée */
+function frise() {
+  const out = [];
+  MOMENTS.forEach((m, i) => {
+    out.push({ kind: 'm', m, idx: i });
+    st.extra.filter(x => x.after === m.id).forEach(x => out.push({ kind: x.type, x }));
+  });
+  return out;
+}
+const nextMoment = () => MOMENTS.find(m => !st.status[m.id]);
+const sentenceOf = it => {
+  if (it.kind === 'm') return st.status[it.m.id] === 'done' ? it.m.say(st.ans[it.m.id] || {}) : '';
+  const x = it.x, a = x.ans || {};
+  if (x.type === 'star') { if (!a.what) return ''; return 'Et là, il s’est passé quelque chose : ' + verbs(a.what) + (a.who ? whoTxt(a.who) : '') + '.' + (a.emo ? ' ' + cap(a.emo[0].say) + '.' : ''); }
+  const E = EXTRAS.find(e => e.id === x.eid); if (!x.done) return '';
+  return cap(E.start) + (a.what ? ' et ' + verbs(a.what) : '') + '.';
+};
+const storyItems = () => frise().filter(it => sentenceOf(it));
+
+/* ====================== voix ====================== */
+let VOICE = null;
+function pickVoice() { const vs = speechSynthesis.getVoices().filter(v => /^fr/i.test(v.lang)); VOICE = vs.find(v => /amélie|audrey|thomas|google|premium|enhanced/i.test(v.name)) || vs[0] || null; }
+if ('speechSynthesis' in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function speak(t, onend, big) {
+  if (!t) { onend && onend(); return; }
+  if (!('speechSynthesis' in window) || !VOICE) {   // pas de voix française : la phrase s'affiche en grand (seulement pour les phrases entières)
+    if (!big) { onend && onend(); return; }
+    const b = document.getElementById('big'); b.textContent = t; b.style.display = 'flex';
+    let done = false; const close = () => { if (done) return; done = true; b.style.display = 'none'; onend && onend(); };
+    b.onclick = close; setTimeout(close, 3500); return; }
+  speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'fr-FR'; u.voice = VOICE; u.rate = .9; if (onend) u.onend = onend; speechSynthesis.speak(u);
+}
+let AC = null;
+function clac() { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); const t = AC.currentTime, o = AC.createOscillator(), g = AC.createGain(); o.type = 'square'; o.frequency.setValueAtTime(900, t); o.frequency.exponentialRampToValueAtTime(200, t + .08); g.gain.setValueAtTime(.25, t); g.gain.exponentialRampToValueAtTime(.001, t + .12); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + .13); } catch (e) { } }
+
+/* ====================== dessin ====================== */
+const $ = id => document.getElementById(id);
+const h = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+function art(c, emoji) {
+  const card = c && CARDS[c.label]; const d = h('div');
+  if (card && card.image) { const im = new Image(); im.src = card.image; im.alt = ''; d.append(im); } else d.textContent = (c && c.emoji) || (card && card.emoji) || emoji || '•';
+  return d;
+}
+function drawFrise() {
+  const f = $('frise'); f.replaceChildren(); const nx = nextMoment();
+  frise().forEach(it => {
+    const el = h('button', 'mp'); let lab, pic;
+    if (it.kind === 'm') {
+      const m = it.m, s = st.status[m.id]; lab = m.label;
+      const first = s === 'done' && firstPick(st.ans[m.id]); pic = first || { label: m.pic };
+      el.classList.add(s === 'done' ? 'done' : s === 'skip' ? 'skip' : (st.level < 3 && nx === m) ? 'next' : 'todo');
+      if (st.level === 3 && !s) el.classList.remove('todo');
+      el.onclick = () => openMoment(m, el);
+    } else if (it.kind === 'star') { el.classList.add('star', 'done'); lab = '⭐ Quelque chose'; pic = firstPick(it.x.ans) || { emoji: '⭐' }; el.onclick = () => openExtra(it.x); }
+    else { const E = EXTRAS.find(e => e.id === it.x.eid); el.classList.add('extra', it.x.done ? 'done' : 'next'); lab = E.label; pic = firstPick(it.x.ans) || { label: E.pic, emoji: E.emoji }; el.onclick = () => openExtra(it.x); }
+    if (ed && ((it.kind === 'm' && ed.m === it.m) || (it.x && ed.x === it.x))) el.classList.add('active');
+    if (reading && reading.cur === it) el.classList.add('reading');
+    const ic = h('div', 'ic'); ic.append(art(pic, pic.emoji));
+    el.append(ic, h('div', 'lb', lab)); el._it = it; f.append(el);
+  });
+  const a = f.querySelector('.active,.next'); if (a) a.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+}
+const firstPick = a => { if (!a) return null; for (const k in a) if (a[k] && a[k][0]) return a[k][0]; return null; };
+function drawSay(txt) { $('say').textContent = txt || (storyItems().length ? '📖 ' + storyItems().map(sentenceOf).join(' ') : 'Touche la pièce qui brille pour commencer ta journée ✨'); }
+
+/* ====================== éditeur d'un moment ====================== */
+function openMoment(m, el) {
+  if (reading) return;
+  if (st.level === 1 && !st.status[m.id] && nextMoment() !== m) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); return; }
+  ed = { m, slots: m.slots, ans: Object.assign({}, st.ans[m.id] || {}), title: m.label };
+  ed.pos = firstOpen(); drawFrise(); drawEditor();
+}
+function openExtra(x) {
+  if (reading) return;
+  ed = { x, ans: Object.assign({}, x.ans || {}) };
+  if (x.type === 'star') { ed.title = '⭐ Il s’est passé quelque chose !'; ed.slots = [S_('what', 'quoi', 'Qu’est-ce qui s’est passé ?', EVENTS), S_('who', 'qui', 'Avec qui ?', PPL, { multi: true, opt: true }), S_('emo', 'emo', 'Comment j’étais ?', EMOS, { opt: true })]; }
+  else { const E = EXTRAS.find(e => e.id === x.eid); ed.title = E.label; ed.slots = [S_('what', 'quoi', 'Qu’est-ce que j’ai fait ?', E.list, { multi: true })]; }
+  ed.pos = firstOpen(); drawFrise(); drawEditor();
+}
+const listOf = s => s.list || whyFor(ed.ans[s.k === 'w1' ? 'e1' : 'e2'] && ed.ans[s.k === 'w1' ? 'e1' : 'e2'][0]);
+function slotUsable(s) {   // « pourquoi » seulement s'il y a une émotion, « et encore » seulement après la 1re
+  if (s.k === 'w1') return !!ed.ans.e1 && listOf(s).length;
+  if (s.k === 'e2') return !!ed.ans.e1;
+  if (s.k === 'w2') return !!ed.ans.e2 && listOf(s).length;
+  return true;
+}
+function firstOpen() { return ed.slots.findIndex(s => slotUsable(s) && ed.ans[s.k] === undefined); }
+function drawEditor() {
+  const E = $('editor'); E.replaceChildren(); if (!ed) { E.append(h('p', 'hint', 'Touche une pièce du puzzle en haut.')); return; }
+  E.append(h('h2', '', ed.title));
+  const row = h('div', 'slots');
+  ed.slots.forEach((s, i) => {
+    if (!slotUsable(s) && ed.ans[s.k] === undefined) return;
+    const v = ed.ans[s.k];
+    if (s.multi && v && v.length) {
+      v.forEach((c, j) => { const sl = slotEl(s, c); sl.querySelector('.x').onclick = e => { e.stopPropagation(); v.splice(j, 1); if (!v.length) delete ed.ans[s.k]; ed.pos = i; drawEditor(); }; sl.onclick = () => { ed.pos = i; drawEditor(); }; row.append(sl); });
+      if (ed.pos === i) { const more = slotEl(s, null); more.classList.add('cur'); more.querySelector('.nm').textContent = '+ encore ?'; row.append(more); }
+    } else {
+      const sl = slotEl(s, v && v[0], v === null);
+      if (ed.pos === i) sl.classList.add('cur');
+      sl.onclick = () => { ed.pos = i; drawEditor(); };
+      const x = sl.querySelector('.x'); if (x) x.onclick = e => { e.stopPropagation(); delete ed.ans[s.k]; if (s.k === 'e1') { delete ed.ans.w1; delete ed.ans.e2; delete ed.ans.w2; } if (s.k === 'e2') delete ed.ans.w2; ed.pos = i; drawEditor(); };
+      row.append(sl);
+    }
+  });
+  E.append(row);
+  if (ed.pos < 0) { finishMoment(); return; }
+  const s = ed.slots[ed.pos];
+  const ask = h('div', 'ask'); ask.style.setProperty('--c', COL[s.t]); const dot = h('div', 'dot', ICO[s.t]); ask.append(dot, h('span', '', s.q)); E.append(ask);
+  const g = h('div', 'grid'); const cur = ed.ans[s.k] || [];
+  listOf(s).filter(c => !(s.multi && cur.some(x => x.label === c.label))).forEach(c => {
+    const t = h('button', 'tile'); t.style.setProperty('--c', COL[s.t]); const a = h('div', 'art'); a.append(art(c)); t.append(a, h('div', '', c.label));
+    t.onclick = () => pick(s, c); g.append(t);
+  });
+  if (s.multi && cur.length) { const go = h('button', 'tile go'); go.append(h('div', 'art', '➡️'), h('div', '', 'C’est tout')); go.onclick = () => { ed.pos = firstOpenAfter(); drawEditor(); }; g.prepend(go); }
+  else { const sk = h('button', 'tile ctl'); sk.append(h('div', 'art', '⏭️'), h('div', '', 'Passer')); sk.onclick = () => { ed.ans[s.k] = null; ed.pos = firstOpen(); drawEditor(); }; g.append(sk); }
+  E.append(g);
+}
+function firstOpenAfter() { const p = ed.pos; const n = ed.slots.findIndex((s, i) => i > p && slotUsable(s) && ed.ans[s.k] === undefined); return n >= 0 ? n : firstOpen(); }
+function slotEl(s, c, skipped) {
+  const sl = h('div', 'slot' + (c ? ' full' : '') + (skipped ? ' skipped' : '')); sl.style.setProperty('--c', COL[s.t]);
+  if (c) { const a = art(c); if (a.querySelector('img')) sl.append(a.firstChild); else sl.append(h('div', 'em', a.textContent)); sl.append(h('div', 'nm', c.label), h('div', 'x', '✕')); }
+  else { sl.append(h('div', 'ico', skipped ? '⏭️' : ICO[s.t]), h('div', 'nm', skipped ? 'passé' : s.q.replace(/ \?$/, ''))); if (skipped) sl.append(h('div', 'x', '✕')); }
+  return sl;
+}
+function pick(s, c) {
+  if (s.multi) { (ed.ans[s.k] = ed.ans[s.k] || []).push(c); speak(c.say.startsWith('#') ? 'toute seule' : c.say); drawEditor(); return; }
+  ed.ans[s.k] = [c]; speak(c.say); ed.pos = firstOpenAfter(); drawEditor();
+}
+function finishMoment() {
+  const any = Object.values(ed.ans).some(v => v && v.length);
+  if (ed.m) { st.ans[ed.m.id] = ed.ans; st.status[ed.m.id] = any ? 'done' : 'skip'; }
+  else { ed.x.ans = ed.ans; ed.x.done = any; if (!any) st.extra = st.extra.filter(x => x !== ed.x); }
+  const it = frise().find(i => (ed.m && i.m === ed.m) || (ed.x && i.x === ed.x));
+  const txt = it ? sentenceOf(it) : ''; save();
+  ed = null; drawFrise(); drawSay(txt ? txt : null); drawEditor();
+  const done = [...$('frise').children].find(e => e._it === it); if (done) { done.classList.add('snap'); clac(); }
+  speak(txt, () => { drawSay(); if (st.level < 3) { const n = nextMoment(); if (n) setTimeout(() => { if (!ed && !reading) openMoment(n, null); }, 300); else allDone(); } else if (!nextMoment()) allDone(); }, true);
+}
+function allDone() { drawSay('🎉 Ma journée est finie ! Touche 🔊 Raconter pour tout dire.'); }
+
+/* ⭐ et ➕ : on les accroche après le dernier moment raconté (l'ordre reste juste) */
+function anchor() { let last = MOMENTS[0].id; MOMENTS.forEach(m => { if (st.status[m.id]) last = m.id; }); if (ed && ed.m) last = ed.m.id; return last; }
+$('bStar').onclick = () => { if (reading) return; const x = { type: 'star', after: anchor(), ans: {} }; st.extra.push(x); openExtra(x); };
+$('bAdd').onclick = () => {
+  if (reading) return;
+  ed = null; const E = $('editor'); E.replaceChildren(); E.append(h('h2', '', '➕ Un autre moment'));
+  const g = h('div', 'grid');
+  EXTRAS.forEach(X => { const t = h('button', 'tile'); t.style.setProperty('--c', '#2aa7a7'); const a = h('div', 'art'); a.append(art({ label: X.pic, emoji: X.emoji })); t.append(a, h('div', '', X.label));
+    t.onclick = () => askWhen(X); g.append(t); });
+  E.append(g); drawFrise();
+};
+function askWhen(X) {
+  const E = $('editor'); E.replaceChildren(); E.append(h('h2', '', X.label + ' : quand ?'));
+  const g = h('div', 'grid');
+  WHEN.forEach(w => { const t = h('button', 'tile'); t.style.setProperty('--c', 'var(--ou)'); t.append(h('div', 'art', w.emoji), h('div', '', w.label));
+    t.onclick = () => { const x = { type: 'extra', eid: X.id, after: w.say === 'matin' ? 'classe2' : 'classe4', ans: {} }; st.extra.push(x); openExtra(x); }; g.append(t); });
+  E.append(g);
+}
+
+/* ====================== raconter, un moment à la fois ====================== */
+$('bRead').onclick = () => {
+  const items = storyItems(); if (!items.length) { speak('Je n’ai encore rien raconté.'); return; }
+  ed = null; drawEditor(); reading = { items, i: 0 }; $('readbar').classList.add('on'); readStep();
+};
+function readStep() {
+  const r = reading; if (!r) return; const it = r.items[r.i]; r.cur = it; drawFrise(); const t = sentenceOf(it); drawSay('🔊 ' + t);
+  $('bNext').textContent = r.i < r.items.length - 1 ? '▶️ Suivant' : '✅ Fini'; speak(t, null, true);
+}
+$('bNext').onclick = () => { if (!reading) return; if (reading.i < reading.items.length - 1) { reading.i++; readStep(); } else stopRead(); };
+$('bStop').onclick = stopRead;
+function stopRead() { reading = null; try { speechSynthesis.cancel(); } catch (e) { } $('readbar').classList.remove('on'); drawFrise(); drawSay(); drawEditor(); }
+
+/* ====================== réglages ====================== */
+$('bNew').onclick = () => { if (!confirmNew()) return; st = blank(); save(); ed = null; stopRead(); };
+function confirmNew() { const b = $('bNew'); if (b.dataset.sure) { delete b.dataset.sure; b.textContent = '🔄'; return true; } b.dataset.sure = 1; b.textContent = '🔄 Effacer ?'; setTimeout(() => { delete b.dataset.sure; b.textContent = '🔄'; }, 2500); return false; }
+$('bLevel').onclick = () => { document.querySelectorAll('.lv').forEach(b => b.classList.toggle('on', +b.dataset.l === st.level)); $('dLevel').showModal(); };
+document.querySelectorAll('.lv').forEach(b => b.onclick = () => { st.level = +b.dataset.l; save(); $('bLevel').textContent = '⚙️ Niveau ' + st.level; $('dLevel').close(); drawFrise(); });
+
+/* ====================== départ ====================== */
+fetch('assets/cards.json').then(r => r.json()).catch(() => []).then(list => {
+  list.forEach(c => { CARDS[c.label] = c; });
+  st = load(); $('bLevel').textContent = '⚙️ Niveau ' + st.level;
+  drawFrise(); drawSay(); drawEditor();
+  if (st.level < 3 && nextMoment() && !Object.keys(st.status).length) openMoment(nextMoment(), null);
+});
+</script>
+</body>
+</html>

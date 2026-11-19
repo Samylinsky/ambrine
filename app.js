@@ -104,7 +104,12 @@ function addWord(c) { S.words.push({ id: c.id, label: nameOf(c), image: c.image,
 function drawStrip(added) {
   const t = $('#tokens'); t.replaceChildren();
   if (!S.words.length) { const p = document.createElement('span'); p.className = 'placeholder'; p.textContent = 'Je touche les images pour parler…'; t.append(p); return; }
-  S.words.forEach(w => { const el = tokEl(w, () => { speak(w.say != null && w.say !== '' ? w.say : w.label); playTok(el); }); t.append(el); });
+  S.words.forEach((w, i) => { const el = tokEl(w, () => { speak(w.say != null && w.say !== '' ? w.say : w.label); playTok(el); });
+    const x = h('span', 'tokX', '✕'); x.setAttribute('role', 'button'); x.setAttribute('aria-label', 'Enlever ' + w.label);
+    const kill = e => { e.preventDefault(); e.stopPropagation(); removeWord(i); };
+    x.addEventListener('click', kill); x.addEventListener('touchend', kill, { passive: false }); x.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+    if (S.fix && S.fix.i === i) el.classList.add('fixing');
+    el.append(x); t.append(el); });
   t.scrollLeft = t.scrollWidth;
   const band = $('#band');
   if (band && document.body.classList.contains('immersive')) {     // la bande grandit : on montre la dernière pièce, les boutons sont poussés à droite
@@ -164,6 +169,22 @@ function playSequence() {
 }
 const endP = t => /[.?!]$/.test(t) ? t : t + '.';
 function sayStrip(big = true) { if (!S.words.length) return; speak(endP(sentenceText(S.words)), big); playSequence(); }
+/* croix sur un picto de la bande : hors histoire → on l'enlève ; dans une histoire → on revient à SA question, le nouveau choix prend sa place */
+function removeWord(i) {
+  const w = S.words[i]; if (!w) return;
+  const f = S.flow;
+  if (f && w.node && S.view === 'phrases') { S.fix = { i, w }; drawStrip(); renderPhrases(); return; }
+  S.fix = null; S.words.splice(i, 1);
+  if (f) f.stack.forEach(st => { if (st.words.length > i) st.words.splice(i, 1); });
+  drawStrip(); if (S.view === 'phrases' && f) renderPhrases();
+}
+function fixWord(it) {
+  const fx = S.fix, f = S.flow; if (!fx || !f) return; S.fix = null;
+  const i = fx.i, old = S.words[i];
+  const apply = arr => { if (arr.length <= i) return; if (it.say === '') arr.splice(i, 1); else { const c = it.c; arr[i] = { ...arr[i], id: c.id, label: nameOf(c), say: (old.pre ? old.pre + ' ' : '') + it.say, image: c.image, emoji: c.emoji, anim: c.anim, color: colorOf(c) }; } };
+  apply(S.words); f.stack.forEach(st => apply(st.words));
+  drawStrip(); renderPhrases(); if (it.say) speak(sentenceText(S.words));
+}
 function tokEl(w, onclick) {
   const b = document.createElement('button'); b.className = 'tok'; b.style.setProperty('--tc', w.color); b.setAttribute('role', 'listitem');
   const i = h('div', 'tart');
@@ -356,7 +377,7 @@ function rootBtn(r, big) {
   b.append(h('span', '', r.label)); b.onclick = () => startFlow(r.key); return b;
 }
 function startFlow(key, keepWords, silent) {
-  if (!S.flows) return;
+  if (!S.flows) return; S.fix = null;
   const r = S.flows.roots.find(x => x.key === key); if (!r) return;
   stopCurrent();
   if (!keepWords) { S.words = []; const c = lookup(r.pic); S.words.push({ id: c.id, label: r.word.label, say: r.word.say, pre: '', stub: true, image: c.image, anim: c.anim, color: colorOf(c) }); }
@@ -373,7 +394,7 @@ function pickItem(it) {
     const last = S.words[S.words.length - 1];
     if (last && last.stub) { S.words.pop(); pre = last.pre || ''; } else if (node.preReplace != null) pre = node.preReplace;
   }
-  if (it.say !== '') S.words.push({ id: c.id, label: nameOf(c), say: (pre ? pre + ' ' : '') + it.say, pre, stub: !!it.next, image: c.image, emoji: c.emoji, anim: c.anim, color: colorOf(c) });
+  if (it.say !== '') S.words.push({ id: c.id, label: nameOf(c), say: (pre ? pre + ' ' : '') + it.say, pre, node, stub: !!it.next, image: c.image, emoji: c.emoji, anim: c.anim, color: colorOf(c) });
   drawStrip(it.say !== '');
   if (it.next) { f.stack.push({ node: it.next, words: S.words.map(w => ({ ...w })) }); if (S.set.speakOnTap && it.say) speak(it.say); renderPhrases(); }
   else {
@@ -387,7 +408,7 @@ function flowMore() {
   f.done = false; f.stack.push({ node: f.cont, again: true, words: S.words.map(w => ({ ...w })) }); renderPhrases();
 }
 function flowBack() {
-  const f = S.flow; if (!f) return;
+  const f = S.flow; if (!f) return; if (S.fix) { S.fix = null; renderPhrases(); return; }
   if (f.done) { f.done = false; S.words = f.stack[f.stack.length - 1].words.map(w => ({ ...w })); drawStrip(); renderPhrases(); return; }
   if (f.stack.length > 1) { f.stack.pop(); S.words = f.stack[f.stack.length - 1].words.map(w => ({ ...w })); drawStrip(); renderPhrases(); }
   else { S.flow = null; S.words = []; drawStrip(); renderPhrases(); }
@@ -524,6 +545,19 @@ function renderPhrases() {
   const f = S.flow;
   if (!f) {
     go('home'); return;
+  }
+  if (S.fix) {   // remplacer un picto : on montre SA question
+    const fx = S.fix, node = fx.w.node;
+    v.append(h('div', 'flowHead fixHead', '✏️ Je change « ' + fx.w.label + ' »'));
+    const bar = h('div', 'row flowBar'); const no = h('button', 'btn', '⬅ Garder'); no.onclick = () => { S.fix = null; renderPhrases(); }; bar.append(no); v.append(bar);
+    v.append(h('h2', '', node.title));
+    const others = sentenceText(S.words.filter((_, k) => k !== fx.i)).toLowerCase();
+    const g = h('div', 'grid');
+    node.items.filter(it => !(node.hideUsed && it.say && others.includes(it.say.replace(/^et /, '').toLowerCase()))).forEach(it => {
+      if (it.say === '') return;   // Passer, Continuer, Rien… : on a « Enlever » à la place
+      g.append(makeTile(Object.assign({}, it.c), { pick: () => fixWord(it) })); });
+    const del = makeTile({ id: 'i_enlever', label: 'Enlever', emoji: '🗑️', section: 'communique' }, { pick: () => fixWord({ say: '' }) });
+    g.append(del); v.append(g); return;
   }
   const cur = f.stack[f.stack.length - 1].node;
   const head = h('div', 'flowHead'); head.append(h('div', 'flowSentence', S.words.length ? (f.done ? endP(sentenceText(S.words)) : lastBits(sentenceText(S.words)) + ' …') : cur.title));

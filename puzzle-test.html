@@ -70,12 +70,27 @@ dialog::backdrop{background:rgba(40,20,70,.45)}
 .legend{display:flex;gap:12px;flex-wrap:wrap;padding:0 14px 6px;font-size:.8rem;font-weight:700}
 .legend span{display:flex;align-items:center;gap:4px}.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
 #big{position:fixed;inset:0;background:#fff;z-index:20;display:none;align-items:center;justify-content:center;padding:30px;font-size:2.2rem;font-weight:900;color:#5a3a8a;text-align:center}
+#fee{display:flex;align-items:center;gap:12px;margin:10px 14px 0;padding:8px 14px;background:linear-gradient(90deg,#f3e8ff,#fff);border:2px solid #e1cdfa;border-radius:18px;min-height:70px}
+#fee .face{font-size:2.8rem;animation:float 2.4s ease-in-out infinite}#fee .bubble{font-size:1.2rem;font-weight:800;color:#5a3a8a}
+#fee.off{display:none}
+@keyframes float{50%{transform:translateY(-6px)}}
+#hand{position:fixed;font-size:3.2rem;pointer-events:none;z-index:30;transition:left .7s ease,top .7s ease,transform .2s;display:none;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+#hand.tap{transform:scale(.8)}
+#tools2{display:flex;gap:10px;padding:0 14px 10px}
+.big.fee{border-color:#c9a6f2;background:#f6efff}.big.logic{border-color:#7cb6f0;background:#eef6ff}
+.tile.stop{border-color:#e2483d;background:#fff1f0;animation:hint 1s infinite}
+@keyframes hint{50%{box-shadow:0 0 0 10px #ffd0cc;transform:scale(1.04)}}
+.stopRow{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.stopRow .tile{width:200px}
+.tile.yn{font-size:1.3rem}.tile.yn .art{font-size:4rem}
+.tile.nope{animation:shake .4s}
+.mp.wiggle{animation:shake .5s 2}
 </style>
 </head>
 <body>
 <header>
   <h1>🧩 Le puzzle de ma journée <span class="test">TEST</span></h1>
-  <button class="hb primary" id="bRead">🔊 Raconter</button>
+  <button class="hb primary" id="bRead">👨 Raconte à papa</button>
   <button class="hb" id="bNew">🔄</button>
   <button class="hb" id="bLevel">⚙️ Niveau 1</button>
 </header>
@@ -83,10 +98,16 @@ dialog::backdrop{background:rgba(40,20,70,.45)}
   <span><i style="background:var(--qui)"></i>👤 Qui</span><span><i style="background:var(--quoi)"></i>✋ Quoi</span>
   <span><i style="background:var(--ou)"></i>📍 Où / comment</span><span><i style="background:var(--emo)"></i>😊 Émotion</span><span><i style="background:var(--pq)"></i>💬 Pourquoi</span>
 </div>
+<div id="fee"><div class="face">🧚‍♀️</div><div class="bubble" id="bubble"></div></div>
 <div id="frise"></div>
+<div id="hand">👆</div>
 <div id="tools">
   <button class="big star" id="bStar">⭐ Il s'est passé quelque chose !</button>
   <button class="big add" id="bAdd">➕ Un autre moment</button>
+</div>
+<div id="tools2">
+  <button class="big fee" id="bDemo">🧚‍♀️ La fée montre</button>
+  <button class="big logic" id="bLogic">🤔 C'est logique ?</button>
 </div>
 <div id="say"></div>
 <div id="readbar"><button class="big" id="bNext">▶️ Suivant</button><button class="big" id="bStop">⏹ Arrêter</button></div>
@@ -97,6 +118,13 @@ dialog::backdrop{background:rgba(40,20,70,.45)}
   <button class="lv" data-l="1"><b>Niveau 1</b> — seule la pièce suivante s'ouvre.</button>
   <button class="lv" data-l="2"><b>Niveau 2</b> — la pièce suivante brille, mais toutes s'ouvrent. L'appli remet dans l'ordre.</button>
   <button class="lv" data-l="3"><b>Niveau 3</b> — tout est libre. L'appli remet dans l'ordre.</button>
+  <h3>🧚‍♀️ La fée</h3>
+  <button class="lv fv" data-k="on" data-v="1">✅ <b>Fée allumée</b></button>
+  <button class="lv fv" data-k="on" data-v="0">⛔ <b>Fée éteinte</b> — Ambrine raconte seule</button>
+  <button class="lv fv" data-k="aide" data-v="1"><b>Étape 1</b> — la fée montre une journée, puis dit chaque question</button>
+  <button class="lv fv" data-k="aide" data-v="2"><b>Étape 2</b> — la fée écrit la question, et des images « pas maintenant » apparaissent</button>
+  <button class="lv fv" data-k="aide" data-v="3"><b>Étape 3</b> — la fée attend, et aide seulement si Ambrine est bloquée</button>
+  <button class="lv fv" data-k="aide" data-v="4"><b>Étape 4</b> — la fée ne dit plus rien</button>
   <button class="hb" onclick="this.closest('dialog').close()">Fermer</button>
 </dialog>
 <script>
@@ -171,7 +199,12 @@ const EXTRAS = [
 const cap = t => t ? t.charAt(0).toUpperCase() + t.slice(1) : t;
 
 /* ====================== état ====================== */
-let CARDS = {}, st, ed = null, reading = null;
+let CARDS = {}, st, ed = null, reading = null, demoId = 0, feeT = null;
+const FKEY = 'puzzle-fee-test';
+let FEE = (() => { try { return Object.assign({ on: 1, aide: 1, demo: '' }, JSON.parse(localStorage.getItem(FKEY) || '{}')); } catch (e) { return { on: 1, aide: 1, demo: '' }; } })();
+const saveFee = () => { try { localStorage.setItem(FKEY, JSON.stringify(FEE)); } catch (e) { } };
+const feeOn = () => FEE.on && FEE.aide < 4;
+function fee(t, talk) { $('fee').classList.toggle('off', !feeOn()); if (!feeOn()) return; $('bubble').textContent = t || ''; if (talk && t) speak(t.replace(/[👉✨🎉⏹🙂😊]/gu, '')); }
 const today = () => new Date().toISOString().slice(0, 10);
 const KEY = 'puzzle-journee-test';
 const blank = () => ({ date: today(), level: (st && st.level) || 1, ans: {}, status: {}, extra: [] });
@@ -204,7 +237,7 @@ if ('speechSynthesis' in window) { pickVoice(); speechSynthesis.onvoiceschanged 
 function speak(t, onend, big) {
   if (!t) { onend && onend(); return; }
   if (!('speechSynthesis' in window) || !VOICE) {   // pas de voix française : la phrase s'affiche en grand (seulement pour les phrases entières)
-    if (!big) { onend && onend(); return; }
+    if (!big) { setTimeout(() => onend && onend(), arguments[3] ? 1800 : 0); return; }
     const b = document.getElementById('big'); b.textContent = t; b.style.display = 'flex';
     let done = false; const close = () => { if (done) return; done = true; b.style.display = 'none'; onend && onend(); };
     b.onclick = close; setTimeout(close, 3500); return; }
@@ -246,6 +279,7 @@ function drawSay(txt) { $('say').textContent = txt || (storyItems().length ? '�
 /* ====================== éditeur d'un moment ====================== */
 function openMoment(m, el) {
   if (reading) return;
+  if ($('bDemo').textContent.startsWith('⏹')) { demoId++; $('hand').style.display = 'none'; $('bDemo').textContent = '🧚‍♀️ La fée montre'; try { speechSynthesis.cancel(); } catch (e) { } }
   if (st.level === 1 && !st.status[m.id] && nextMoment() !== m) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); return; }
   ed = { m, slots: m.slots, ans: Object.assign({}, st.ans[m.id] || {}), title: m.label };
   ed.pos = firstOpen(); drawFrise(); drawEditor();
@@ -284,17 +318,43 @@ function drawEditor() {
     }
   });
   E.append(row);
-  if (ed.pos < 0) { finishMoment(); return; }
+  clearTimeout(feeT);
+  if (ed.pos < 0) {   // la phrase est complète : on apprend à S'ARRÊTER
+    const r = h('div', 'stopRow'); const t = h('button', 'tile stop'); t.append(h('div', 'art', '⏹'), h('div', '', 'Point : phrase finie'));
+    t.onclick = finishMoment; r.append(t); E.append(r);
+    fee('Ta phrase est finie ! Touche ⏹ pour la dire 👉', FEE.aide === 1); return; }
   const s = ed.slots[ed.pos];
   const ask = h('div', 'ask'); ask.style.setProperty('--c', COL[s.t]); const dot = h('div', 'dot', ICO[s.t]); ask.append(dot, h('span', '', s.q)); E.append(ask);
+  const newQ = ed.lastQ !== s.k; ed.lastQ = s.k;
+  if (FEE.aide === 1) fee(s.q, newQ); else if (FEE.aide === 2) fee(s.q); else { fee(''); if (FEE.aide === 3 && feeOn()) feeT = setTimeout(() => fee('Je t’aide : ' + s.q, true), 8000); }
   const g = h('div', 'grid'); const cur = ed.ans[s.k] || [];
   listOf(s).filter(c => !(s.multi && cur.some(x => x.label === c.label))).forEach(c => {
     const t = h('button', 'tile'); t.style.setProperty('--c', COL[s.t]); const a = h('div', 'art'); a.append(art(c)); t.append(a, h('div', '', c.label));
     t.onclick = () => pick(s, c); g.append(t);
   });
+  intrus(s).forEach(([c, home]) => {   // images « pas maintenant » : pour apprendre où va chaque chose
+    const t = h('button', 'tile'); t.style.setProperty('--c', COL[s.t]); const a = h('div', 'art'); a.append(art(c)); t.append(a, h('div', '', c.label));
+    t.onclick = () => notNow(t, c, home); g.insertBefore(t, g.children[Math.floor(Math.random() * (g.children.length + 1))] || null); });
   if (s.multi && cur.length) { const go = h('button', 'tile go'); go.append(h('div', 'art', '➡️'), h('div', '', 'C’est tout')); go.onclick = () => { ed.pos = firstOpenAfter(); drawEditor(); }; g.prepend(go); }
   else { const sk = h('button', 'tile ctl'); sk.append(h('div', 'art', '⏭️'), h('div', '', 'Passer')); sk.onclick = () => { ed.ans[s.k] = null; ed.pos = firstOpen(); drawEditor(); }; g.append(sk); }
   E.append(g);
+}
+/* deux images d'un AUTRE moment (seulement à partir de l'étape 2, jamais au début) */
+function intrus(s) {
+  if (!feeOn() || FEE.aide < 2 || !ed.m) return [];
+  const here = new Set(); ed.m.slots.forEach(x => (x.list || []).forEach(c => here.add(c.label)));
+  const pool = [];
+  MOMENTS.forEach(m => { if (m === ed.m || m.label === ed.m.label) return; m.slots.forEach(x => (x.list || []).forEach(c => { if (!here.has(c.label) && !pool.some(p => p[0].label === c.label)) pool.push([c, { m, k: x.k, multi: x.multi }]); })); });
+  if (!ed.intr || ed.intr.slot !== s.k) ed.intr = { slot: s.k, list: pool.sort(() => Math.random() - .5).slice(0, 2) };
+  return ed.intr.list;
+}
+function notNow(el, c, home) {
+  el.classList.remove('nope'); void el.offsetWidth; el.classList.add('nope');
+  const m = home.m; const msg = '« ' + c.label + ' », ce n’est pas maintenant. C’est pour « ' + m.label + ' » !';
+  $('bubble').textContent = msg; $('fee').classList.remove('off'); speak(msg);
+  if (!st.status[m.id]) { const a = st.ans[m.id] = st.ans[m.id] || {}; if (home.multi) { a[home.k] = a[home.k] || []; if (!a[home.k].some(x => x.label === c.label)) a[home.k].push(c); } else a[home.k] = [c]; save(); }
+  const p = [...$('frise').children].find(e => e._it && e._it.m === m); if (p) { p.classList.remove('wiggle'); void p.offsetWidth; p.classList.add('wiggle'); }
+  ed.intr.list = ed.intr.list.filter(x => x[0] !== c); setTimeout(drawEditor, 1800);
 }
 function firstOpenAfter() { const p = ed.pos; const n = ed.slots.findIndex((s, i) => i > p && slotUsable(s) && ed.ans[s.k] === undefined); return n >= 0 ? n : firstOpen(); }
 function slotEl(s, c, skipped) {
@@ -313,11 +373,58 @@ function finishMoment() {
   else { ed.x.ans = ed.ans; ed.x.done = any; if (!any) st.extra = st.extra.filter(x => x !== ed.x); }
   const it = frise().find(i => (ed.m && i.m === ed.m) || (ed.x && i.x === ed.x));
   const txt = it ? sentenceOf(it) : ''; save();
-  ed = null; drawFrise(); drawSay(txt ? txt : null); drawEditor();
+  ed = null; drawFrise(); drawSay(txt ? txt : null); drawEditor(); if (txt) fee('Bravo ! On passe à la page suivante 👉');
   const done = [...$('frise').children].find(e => e._it === it); if (done) { done.classList.add('snap'); clac(); }
   speak(txt, () => { drawSay(); if (st.level < 3) { const n = nextMoment(); if (n) setTimeout(() => { if (!ed && !reading) openMoment(n, null); }, 300); else allDone(); } else if (!nextMoment()) allDone(); }, true);
 }
 function allDone() { drawSay('🎉 Ma journée est finie ! Touche 🔊 Raconter pour tout dire.'); }
+
+/* ====================== la fée montre une journée ====================== */
+const DEMO = [['depart', 'Ce matin, je suis allée à l’école en bus avec maman.'], ['classe1', 'En classe, j’ai dessiné.'], ['recre1', 'À la récréation, j’ai joué avec mes copines au toboggan.'],
+  ['classe2', 'Après la récréation, j’ai lu.'], ['midi', 'À midi, je suis rentrée à la maison en bus.'], ['repas', 'J’ai mangé des pâtes, et en dessert une glace.'],
+  ['maison', 'Après, j’ai regardé la télé.'], ['retour', 'Ensuite, je suis retournée à l’école.'], ['classe3', 'L’après-midi, j’ai fait de la musique.'],
+  ['recre2', 'À la récréation, j’ai joué au ballon.'], ['classe4', 'Après la récréation, j’ai fait un puzzle.'], ['soir', 'Le soir, je suis rentrée à la maison avec papa.'],
+  ['emo', 'J’étais fatiguée et contente.']];
+function runDemo() {
+  if (reading) return; const my = ++demoId; ed = null; drawEditor(); drawFrise();
+  $('bDemo').textContent = '⏹ Arrêter la fée'; $('fee').classList.remove('off');
+  const hand = $('hand'); let i = -1;
+  const end = () => { if (my !== demoId) return; hand.style.display = 'none'; $('bDemo').textContent = '🧚‍♀️ La fée montre'; FEE.demo = today(); saveFee();
+    document.querySelectorAll('.mp.reading').forEach(e => e.classList.remove('reading'));
+    $('bubble').textContent = 'À toi ! Commence par la pièce qui brille ✨'; speak('À toi ! Commence par la pièce qui brille.', () => { if (st.level < 3 && nextMoment() && !ed) openMoment(nextMoment(), null); }); };
+  const step = () => {
+    if (my !== demoId) return; i++; if (i >= DEMO.length) return end();
+    const [id, t] = DEMO[i]; const el = [...$('frise').children].find(e => e._it && e._it.m && e._it.m.id === id); if (!el) return step();
+    el.scrollIntoView({ inline: 'center', block: 'nearest' });
+    setTimeout(() => { if (my !== demoId) return; const r = el.getBoundingClientRect(); hand.style.display = 'block'; hand.style.left = (r.left + r.width / 2 - 18) + 'px'; hand.style.top = (r.top + r.height / 2) + 'px';
+      document.querySelectorAll('.mp.reading').forEach(e => e.classList.remove('reading')); el.classList.add('reading'); $('bubble').textContent = t;
+      setTimeout(() => { hand.classList.add('tap'); speak(t, () => { hand.classList.remove('tap'); setTimeout(step, 400); }, false, true); }, 700); }, 300);
+  };
+  $('bubble').textContent = 'Regarde, je te raconte MA journée, dans l’ordre !'; speak('Regarde, je te raconte ma journée, dans l’ordre !', () => setTimeout(step, 300), false, true);
+}
+$('bDemo').onclick = () => { if ($('hand').style.display === 'block' || $('bDemo').textContent.startsWith('⏹')) { demoId++; $('hand').style.display = 'none'; try { speechSynthesis.cancel(); } catch (e) { } $('bDemo').textContent = '🧚‍♀️ La fée montre'; drawFrise(); fee(''); return; } runDemo(); };
+
+/* ====================== jeu « C'est logique ? » ====================== */
+const LOGIC = [
+  ['À la récréation, j’ai joué au toboggan.', 1], ['À midi, j’ai mangé des pâtes.', 1], ['Ce matin, je suis allée à l’école en bus.', 1], ['En classe, j’ai dessiné.', 1], ['Le soir, je suis rentrée à la maison.', 1],
+  ['À la récréation, j’ai dormi dans la piscine.', 0, 'À la récréation, j’ai joué avec mes copines.'], ['Ce matin, je suis allée à l’école en chocolat.', 0, 'Ce matin, je suis allée à l’école en bus.'],
+  ['En classe, j’ai mangé le toboggan.', 0, 'En classe, j’ai dessiné.'], ['À midi, j’ai bu un ballon.', 0, 'À midi, j’ai bu de l’eau.'],
+  ['À la récréation, j’ai joué piscine chocolat dormir fatiguée.', 0, 'À la récréation, j’ai joué au ballon.'], ['Le soir, je suis rentrée à la maison en piscine.', 0, 'Le soir, je suis rentrée à la maison en voiture.']];
+function logicRound(n) {
+  if (reading) return; demoId++; $('hand').style.display = 'none'; ed = null; drawFrise();
+  if (n >= 3) { $('fee').classList.remove('off'); $('bubble').textContent = 'Super ! Tu sais ce qui a du sens 🎉'; speak('Super ! Tu sais ce qui a du sens !'); drawEditor(); return; }
+  const q = LOGIC[Math.floor(Math.random() * LOGIC.length)];
+  const E = $('editor'); E.replaceChildren(); E.append(h('h2', '', '🤔 C’est logique ?')); const sayEl = h('div', 'ask', '« ' + q[0] + ' »'); E.append(sayEl);
+  const g = h('div', 'grid');
+  [['Oui', '👍', 1], ['Non', '👎', 0]].forEach(([l, e, v]) => { const t = h('button', 'tile yn'); t.style.setProperty('--c', v ? 'var(--quoi)' : '#e2483d'); t.append(h('div', 'art', e), h('div', '', l));
+    t.onclick = () => { const good = v === q[1]; let msg;
+      if (good) msg = q[1] ? 'Oui, bravo ! C’est logique.' : 'Bravo ! Ça n’a pas de sens. On dit : ' + q[2];
+      else msg = q[1] ? 'Si, écoute bien, c’est logique : ' + q[0] : 'Hmm, écoute bien… Ce n’est pas logique. On dit : ' + q[2];
+      $('fee').classList.remove('off'); $('bubble').textContent = msg; speak(msg, () => setTimeout(() => logicRound(n + 1), 600), false, true); g.style.pointerEvents = 'none'; }; g.append(t); });
+  E.append(g); $('fee').classList.remove('off'); $('bubble').textContent = 'Écoute bien… est-ce que c’est logique ?';
+  speak('Écoute bien. ' + q[0] + ' Est-ce que c’est logique ?', null, false, true);
+}
+$('bLogic').onclick = () => logicRound(0);
 
 /* ⭐ et ➕ : on les accroche après le dernier moment raconté (l'ordre reste juste) */
 function anchor() { let last = MOMENTS[0].id; MOMENTS.forEach(m => { if (st.status[m.id]) last = m.id; }); if (ed && ed.m) last = ed.m.id; return last; }
@@ -354,15 +461,19 @@ function stopRead() { reading = null; try { speechSynthesis.cancel(); } catch (e
 /* ====================== réglages ====================== */
 $('bNew').onclick = () => { if (!confirmNew()) return; st = blank(); save(); ed = null; stopRead(); };
 function confirmNew() { const b = $('bNew'); if (b.dataset.sure) { delete b.dataset.sure; b.textContent = '🔄'; return true; } b.dataset.sure = 1; b.textContent = '🔄 Effacer ?'; setTimeout(() => { delete b.dataset.sure; b.textContent = '🔄'; }, 2500); return false; }
-$('bLevel').onclick = () => { document.querySelectorAll('.lv').forEach(b => b.classList.toggle('on', +b.dataset.l === st.level)); $('dLevel').showModal(); };
-document.querySelectorAll('.lv').forEach(b => b.onclick = () => { st.level = +b.dataset.l; save(); $('bLevel').textContent = '⚙️ Niveau ' + st.level; $('dLevel').close(); drawFrise(); });
+$('bLevel').onclick = () => { refreshLv(); $('dLevel').showModal(); };
+document.querySelectorAll('.lv.fv').forEach(b => b.onclick = () => { FEE[b.dataset.k] = +b.dataset.v; saveFee(); refreshLv(); fee(''); if (ed) drawEditor(); });
+function refreshLv() { document.querySelectorAll('.lv').forEach(b => b.classList.toggle('on', b.classList.contains('fv') ? FEE[b.dataset.k] === +b.dataset.v : +b.dataset.l === st.level)); }
+document.querySelectorAll('.lv:not(.fv)').forEach(b => b.onclick = () => { st.level = +b.dataset.l; save(); $('bLevel').textContent = '⚙️ Niveau ' + st.level; refreshLv(); drawFrise(); });
 
 /* ====================== départ ====================== */
 fetch('assets/cards.json').then(r => r.json()).catch(() => []).then(list => {
   list.forEach(c => { CARDS[c.label] = c; });
   st = load(); $('bLevel').textContent = '⚙️ Niveau ' + st.level;
   drawFrise(); drawSay(); drawEditor();
-  if (st.level < 3 && nextMoment() && !Object.keys(st.status).length) openMoment(nextMoment(), null);
+  fee('');
+  if (feeOn() && FEE.aide === 1 && FEE.demo !== today() && !Object.keys(st.status).length) setTimeout(runDemo, 600);
+  else if (st.level < 3 && nextMoment() && !Object.keys(st.status).length) openMoment(nextMoment(), null);
 });
 </script>
 </body>

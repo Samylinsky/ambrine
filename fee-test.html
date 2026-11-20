@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>TEST — J'apprends avec la fée</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;background:#faf7ff;color:#2d2340;user-select:none;-webkit-user-select:none}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-bottom:2px solid #e6dcf5;position:sticky;top:0;z-index:5}
+header h1{font-size:1.1rem;margin:0;flex:1}
+.test{background:#ffe08a;color:#6b4b00;border-radius:8px;padding:2px 8px;font-size:.8rem;margin-left:6px}
+.hb{border:2px solid #e6dcf5;background:#fff;border-radius:12px;padding:8px 12px;font-weight:700;font-size:.95rem}
+#stars{font-size:1rem;font-weight:800;color:#b07d00}
+/* la fée */
+#fee{display:flex;align-items:center;gap:12px;margin:12px 14px;padding:10px 14px;background:linear-gradient(90deg,#f3e8ff,#fff);border:2px solid #e1cdfa;border-radius:18px;min-height:84px}
+#fee .face{font-size:3.2rem;animation:float 2.4s ease-in-out infinite}
+#fee .bubble{font-size:1.3rem;font-weight:800;color:#5a3a8a}
+#fee.off{display:none}
+@keyframes float{50%{transform:translateY(-6px)}}
+/* bande */
+#strip{display:flex;align-items:center;gap:10px;margin:0 14px 12px;padding:10px;background:#fff;border:3px solid #e6dcf5;border-radius:18px;min-height:112px}
+#tokens{display:flex;gap:10px;flex:1;overflow-x:auto;padding-top:10px}
+.tok{flex:0 0 auto;width:88px;border:3px solid #bda4e6;border-radius:14px;background:#fff;padding:3px;text-align:center;position:relative;animation:pop .25s}
+.tok .art{height:60px;border-radius:9px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2.2rem;background:#f6f3fa}
+.tok .art img{width:100%;height:100%;object-fit:cover}
+.tok span{font-size:.75rem;font-weight:800}
+.tok .x{position:absolute;top:-10px;right:-10px;width:28px;height:28px;border-radius:50%;background:#e2483d;color:#fff;font-weight:900;line-height:28px;font-size:15px}
+.ghost{flex:0 0 auto;width:88px;height:92px;border:3px dashed #d9c9f0;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#c3b0e3}
+.ph{color:#9b8bb5;font-weight:700}
+#bSay{flex:0 0 auto;width:110px;height:92px;border:none;border-radius:16px;background:#2fa84f;color:#fff;font-size:1.2rem;font-weight:900}
+#bSay.glow{animation:glow 1.1s infinite}
+@keyframes pop{from{transform:scale(.6)}to{transform:scale(1)}}
+/* grille */
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;padding:0 14px 20px}
+.tile{position:relative;border:4px solid #f0a23c;border-radius:18px;background:#fff;padding:6px;text-align:center;font-weight:800;font-size:1rem;transition:transform .15s}
+.tile .art{height:108px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:3.4rem;background:#f6f3fa}
+.tile .art img{width:100%;height:100%;object-fit:cover}
+.tile.key{border-color:#8a56c2}.tile.who{border-color:#e6b800}
+.tile.hint{box-shadow:0 0 0 6px #ffe36e;animation:hint 1s infinite;z-index:2}
+.tile.dim{opacity:.35}
+.tile.nope{animation:nope .35s}
+.tile:active{transform:scale(.95)}
+@keyframes hint{50%{box-shadow:0 0 0 12px #ffe36e;transform:scale(1.04)}}
+@keyframes nope{30%{transform:scale(.94)}60%{transform:scale(1.02)}}
+#hand{position:fixed;font-size:3.4rem;pointer-events:none;z-index:30;transition:left .7s ease,top .7s ease,transform .2s;display:none;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+#hand.tap{transform:scale(.8)}
+.sec{padding:0 14px;margin:4px 0 8px;font-weight:800;color:#6a5d80;font-size:.95rem}
+/* écran "donne-lui" */
+#give{position:fixed;inset:0;background:rgba(250,247,255,.97);z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px;text-align:center}
+#give .s{font-size:2rem;font-weight:900;color:#5a3a8a}
+#give .who{font-size:1.2rem;color:#6a5d80;font-weight:700}
+.bigb{border:none;border-radius:20px;padding:18px 28px;font-size:1.4rem;font-weight:900}
+.ok{background:#2fa84f;color:#fff}.later{background:#eee;color:#555;font-size:1rem}
+#bravo{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:25;pointer-events:none;font-size:7rem;animation:pop .4s}
+dialog{border:none;border-radius:18px;padding:18px;max-width:460px;width:92%}
+dialog::backdrop{background:rgba(40,20,70,.45)}
+dialog h3{margin:0 0 6px}dialog h4{margin:14px 0 6px}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border-radius:12px;border:3px solid #e6dcf5;background:#fff;font-size:.95rem}
+.opt.on{border-color:#8a56c2;background:#f3ecfb}
+.stat{background:#f3ecfb;border-radius:12px;padding:10px;font-size:1rem;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:2px solid #e6dcf5;border-radius:12px;padding:8px 10px;background:#fff;font-weight:700}
+#big{position:fixed;inset:0;background:#fff;z-index:40;display:none;align-items:center;justify-content:center;padding:30px;font-size:2.4rem;font-weight:900;color:#5a3a8a;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>🧚‍♀️ J'apprends avec la fée <span class="test">TEST</span></h1>
+  <span id="stars"></span>
+  <button class="hb" id="bMission">🎯 Mission</button>
+  <button class="hb" id="bParent">⚙️ Parents</button>
+</header>
+<div id="fee"><div class="face">🧚‍♀️</div><div class="bubble" id="bubble"></div></div>
+<div id="strip"><div id="tokens"></div><button id="bSay">🔊 Dire</button></div>
+<div id="board"></div>
+<div id="hand">👆</div>
+<div id="give"><div class="who" id="giveWho"></div><div class="s" id="giveS"></div>
+  <button class="bigb ok" id="bGiven">✅ C'est fait, je lui ai donné</button>
+  <button class="bigb later" id="bNotNow">Pas maintenant (on lui explique)</button></div>
+<div id="bravo">⭐</div>
+<div id="big"></div>
+
+<dialog id="dParent">
+  <h3>⚙️ Réglages parents</h3>
+  <h4>Mode apprentissage (la fée)</h4>
+  <button class="opt" data-k="on" data-v="1">✅ <b>Oui</b> — la fée aide Ambrine</button>
+  <button class="opt" data-k="on" data-v="0">⛔ <b>Non</b> — plus de fée, Ambrine parle seule</button>
+  <h4>Aide de la fée</h4>
+  <button class="opt" data-k="aide" data-v="1"><b>Étape 1</b> — la fée montre l'exemple, puis Ambrine fait pareil</button>
+  <button class="opt" data-k="aide" data-v="2"><b>Étape 2</b> — la fée donne un indice (le bon picto brille)</button>
+  <button class="opt" data-k="aide" data-v="3"><b>Étape 3</b> — la fée attend, et aide seulement si Ambrine est bloquée</button>
+  <button class="opt" data-k="aide" data-v="4"><b>Étape 4</b> — la fée ne dit rien (Ambrine choisit seule)</button>
+  <h4>Difficulté</h4>
+  <button class="opt" data-k="niv" data-v="1"><b>Niveau 1</b> — 1 picto : « bonbons »</button>
+  <button class="opt" data-k="niv" data-v="2"><b>Niveau 2</b> — 2 pictos : « je veux » + « bonbons »</button>
+  <button class="opt" data-k="niv" data-v="3"><b>Niveau 3</b> — une phrase : « Papa, je veux des bonbons »</button>
+  <h4>Ce qu'elle a fait</h4>
+  <div class="stat" id="stat"></div>
+  <p><button class="hb" id="bReset">Remettre les compteurs à zéro</button> <button class="hb" onclick="this.closest('dialog').close()">Fermer</button></p>
+</dialog>
+<dialog id="dMission">
+  <h3>🎯 Qu'est-ce qu'elle veut maintenant ?</h3>
+  <p style="margin:4px 0 10px;color:#6a5d80">Choisissez ce qu'elle désire vraiment, maintenant. La fée lui apprend à le demander, et vous lui donnez pour de vrai.</p>
+  <div class="chips" id="mChips"></div>
+  <h4>À qui ?</h4>
+  <div class="chips" id="mWho"></div>
+  <p><button class="hb" onclick="this.closest('dialog').close()">Fermer</button></p>
+</dialog>
+
+<script>
+'use strict';
+/* ---------- données ---------- */
+const WANTS = [
+  ['Bonbons', 'des bonbons'], ['Chocolat', 'du chocolat'], ['Gâteau', 'du gâteau'], ['Glace', 'une glace'], ['Biscuit', 'un biscuit'],
+  ['Eau', 'de l’eau'], ['Jus', 'du jus'], ['Un câlin', 'un câlin'], ['iPad', 'l’iPad'], ['Télé', 'la télé'], ['Dehors', 'aller dehors'],
+  ['Toilettes', 'aller aux toilettes'], ['Jouer', 'jouer', '🎲'], ['Ballon', 'le ballon'], ['Musique', 'de la musique'], ['Encore', 'encore']
+].map(([label, say, emoji]) => ({ label, say, emoji }));
+const WHO = [['Papa', 'papa'], ['Maman', 'maman'], ['Yusuf', 'Yusuf'], ['Nayla', 'Nayla'], ['Mamie', 'mamie'], ['Papi', 'papi']].map(([label, say]) => ({ label, say }));
+const JV = { label: 'Je veux', say: 'je veux', key: 1 };
+const PLZ = { label: 'S’il te plaît', say: 's’il te plaît', emoji: '🙏', key: 1 };
+
+/* ---------- état ---------- */
+let CARDS = {}, S, words = [], target = null, mission = null, waitT = null, demoing = false, demoId = 0;
+const KEY = 'fee-test';
+const weekKey = () => { const d = new Date(); const j = new Date(d.getFullYear(), 0, 1); return d.getFullYear() + '-S' + Math.ceil(((d - j) / 864e5 + j.getDay() + 1) / 7); };
+function load() { try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) return s; } catch (e) { } return { on: 1, aide: 1, niv: 1, stars: 0, log: {} }; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+function logIt(kind) { const w = weekKey(); S.log[w] = S.log[w] || { seule: 0, aide: 0, donne: 0 }; S.log[w][kind]++; save(); }
+
+/* ---------- voix ---------- */
+let VOICE = null;
+function pickVoice() { const vs = speechSynthesis.getVoices().filter(v => /^fr/i.test(v.lang)); VOICE = vs.find(v => /amélie|audrey|thomas|google|premium|enhanced/i.test(v.name)) || vs[0] || null; }
+if ('speechSynthesis' in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function speak(t, onend, big) {
+  if (!t) { onend && onend(); return; }
+  if (!('speechSynthesis' in window) || !VOICE) {
+    if (big) { const b = $('big'); b.textContent = t; b.style.display = 'flex'; let d = 0; const c = () => { if (d++) return; b.style.display = 'none'; onend && onend(); }; b.onclick = c; setTimeout(c, 2500); }
+    else setTimeout(() => onend && onend(), 600); return; }
+  speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'fr-FR'; u.voice = VOICE; u.rate = .9; if (onend) u.onend = onend; speechSynthesis.speak(u);
+}
+
+/* ---------- outils ---------- */
+const $ = id => document.getElementById(id);
+const h = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+function art(c) { const d = h('div', 'art'); const k = CARDS[c.label]; if (k && k.image) { const i = new Image(); i.src = k.image; i.alt = ''; d.append(i); } else d.textContent = c.emoji || (k && k.emoji) || '•'; return d; }
+const sentence = ws => { let t = ws.map(w => w.say).join(' '); t = t.replace(/^(papa|maman|yusuf|nayla|mamie|papi) /i, m => m.trim() + ', ').replace(/ s’il te plaît$/, ', s’il te plaît'); return t.charAt(0).toUpperCase() + t.slice(1); };
+const fee = t => { $('bubble').textContent = t; };
+
+/* ce qu'il faut toucher, selon le niveau */
+function targetFor(m) {
+  if (S.niv === 1) return [m.what];
+  if (S.niv === 2) return [JV, m.what];
+  return [m.who, JV, m.what];
+}
+function newMission(what, who) {
+  mission = { what: what || WANTS[Math.floor(Math.random() * 6)], who: who || mission && mission.who || WHO[0] };
+  demoId++; demoing = false; $('hand').style.display = 'none'; try { speechSynthesis.cancel(); } catch (e) { }
+  target = S.on ? targetFor(mission) : null; words = []; draw(); startStep();
+}
+
+/* ---------- dessin ---------- */
+function draw() {
+  const T = $('tokens'); T.replaceChildren();
+  words.forEach((w, i) => { const t = h('div', 'tok'); t.append(art(w), h('span', '', w.label)); const x = h('div', 'x', '✕'); x.onclick = e => { e.stopPropagation(); words.splice(i, 1); draw(); startStep(); }; t.append(x); T.append(t); });
+  if (target) for (let i = words.length; i < target.length; i++) T.append(h('div', 'ghost', '?'));
+  if (!words.length && !target) T.append(h('span', 'ph', 'Je touche les images pour parler…'));
+  const B = $('board'); B.replaceChildren();
+  const need = S.niv === 3 || !S.on, needJV = S.niv >= 2 || !S.on;
+  if (need) { B.append(h('div', 'sec', '👤 À qui je parle ?')); B.append(grid(WHO, 'who')); }
+  if (needJV) { B.append(h('div', 'sec', '💬 Je dis')); B.append(grid(S.on ? [JV] : [JV, PLZ], 'key')); }
+  B.append(h('div', 'sec', '⭐ Ce que je veux')); B.append(grid(WANTS, ''));
+  $('fee').classList.toggle('off', !S.on || S.aide === 4);
+  $('stars').textContent = '⭐ ' + S.stars;
+  $('bSay').classList.toggle('glow', !!(target && words.length === target.length));
+}
+function grid(list, cls) {
+  const g = h('div'); g.id = ''; g.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;padding:0 14px 14px';
+  list.forEach(c => { const t = h('button', 'tile ' + cls); t.append(art(c), h('div', '', c.label)); t._c = c; t.onclick = () => tap(c, t); g.append(t); });
+  return g;
+}
+const tileOf = c => [...document.querySelectorAll('.tile')].find(t => t._c === c);
+function clearHints() { document.querySelectorAll('.tile.hint').forEach(t => t.classList.remove('hint')); clearTimeout(waitT); }
+
+/* ---------- l'aide de la fée ---------- */
+function startStep() {
+  clearHints(); if (!S.on || !target) { fee(''); return; }
+  const next = target[words.length];
+  if (!next) { fee('Bravo ! Touche 🔊 Dire'); if (S.aide <= 3) { $('bSay').classList.add('glow'); } return; }
+  const full = sentence(target);
+  if (words.length === 0 && S.aide === 1) return demo();
+  if (S.aide === 1 || S.aide === 2) { fee(words.length ? 'Et maintenant ?' : 'À toi ! Dis : « ' + full + ' »'); hint(next); }
+  else if (S.aide === 3) { fee(words.length ? '' : 'Qu’est-ce que tu veux dire ?'); waitT = setTimeout(() => { fee('Je t’aide un peu…'); hint(next); }, 8000); }
+  else fee('');
+}
+function hint(c) { const t = tileOf(c); if (t) { t.classList.add('hint'); t.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
+/* étape 1 : la fée montre l'exemple avec sa main */
+function demo() {
+  demoing = true; const my = ++demoId; const full = sentence(target); fee('Regarde, je te montre : « ' + full + ' »');
+  const hand = $('hand'); let i = 0;
+  const step = () => {
+    if (my !== demoId) return;
+    if (i >= target.length) { hand.style.display = 'none'; demoing = false; speak(full, () => { fee('À toi ! Fais comme moi 👉'); hint(target[0]); }); return; }
+    const t = tileOf(target[i]); if (!t) { i++; return step(); }
+    t.scrollIntoView({ block: 'center' });
+    setTimeout(() => { const r = t.getBoundingClientRect(); hand.style.display = 'block'; hand.style.left = (r.left + r.width / 2 - 20) + 'px'; hand.style.top = (r.top + r.height / 2 - 10) + 'px';
+      setTimeout(() => { hand.classList.add('tap'); t.classList.add('hint'); speak(target[i].say, () => { hand.classList.remove('tap'); t.classList.remove('hint'); i++; setTimeout(step, 250); }); }, 750); }, 250);
+  };
+  setTimeout(step, 900);
+}
+
+/* ---------- toucher ---------- */
+function tap(c, el) {
+  if (demoing) return;
+  if (S.on && target) {
+    const next = target[words.length];
+    if (!next) return;
+    if (c !== next) {   // jamais de « faux » : on montre doucement le bon
+      el.classList.remove('nope'); void el.offsetWidth; el.classList.add('nope');
+      if (S.aide <= 3) { fee('Presque ! Regarde, c’est celle-là ✨'); hint(next); } else { words.push(c); speak(c.say); draw(); }
+      return;
+    }
+  }
+  words.push(c); speak(c.say); draw(); startStep();
+}
+$('bSay').onclick = () => {
+  if (!words.length) return;
+  const t = sentence(words); clearHints();
+  speak(t, () => {
+    if (S.on && target && words.length < target.length) { fee('Il manque encore une image !'); startStep(); return; }
+    const alone = !S.on || S.aide === 4; logIt(alone ? 'seule' : 'aide');
+    const w = words.find(x => WHO.includes(x)) || (mission && mission.who) || WHO[0];
+    $('giveWho').textContent = (w ? w.label : 'Papa') + ', Ambrine te demande :';
+    $('giveS').textContent = '« ' + t + ' »'; $('give').style.display = 'flex';
+  }, true);
+};
+$('bGiven').onclick = () => {
+  $('give').style.display = 'none'; S.stars++; logIt('donne'); save();
+  const b = $('bravo'); b.style.display = 'flex'; setTimeout(() => b.style.display = 'none', 1200);
+  fee('Bravo Ambrine ! Tu as demandé, et tu as eu ce que tu voulais 🎉'); speak('Bravo Ambrine !');
+  setTimeout(() => { if (S.on) newMission(); else { words = []; draw(); } }, 2200);
+};
+$('bNotNow').onclick = () => { $('give').style.display = 'none'; words = []; draw(); fee('Tu as bien demandé ! Pas maintenant, mais plus tard 😊'); setTimeout(() => S.on ? newMission(mission.what) : null, 2500); };
+
+/* ---------- parents ---------- */
+$('bParent').onclick = () => { refreshOpts(); $('dParent').showModal(); };
+document.querySelectorAll('.opt').forEach(b => b.onclick = () => { S[b.dataset.k] = +b.dataset.v; save(); refreshOpts(); newMission(mission && mission.what, mission && mission.who); });
+function refreshOpts() {
+  document.querySelectorAll('.opt').forEach(b => b.classList.toggle('on', S[b.dataset.k] === +b.dataset.v));
+  const w = S.log[weekKey()] || { seule: 0, aide: 0, donne: 0 };
+  const weeks = Object.keys(S.log).sort().slice(-4).map(k => `${k} : ${S.log[k].seule} seule, ${S.log[k].aide} avec la fée`).join('<br>');
+  $('stat').innerHTML = `<b>Cette semaine :</b><br>🙋‍♀️ ${w.seule} phrase(s) <b>toute seule</b><br>🧚‍♀️ ${w.aide} phrase(s) avec la fée<br>✅ ${w.donne} fois où elle a eu ce qu'elle demandait` +
+    (weeks ? `<br><br><b>Les dernières semaines :</b><br>${weeks}` : '') +
+    `<br><br><i>Quand elle fait beaucoup de phrases seule pendant 2–3 semaines, vous pouvez passer à l'étape suivante, puis éteindre la fée.</i>`;
+}
+$('bReset').onclick = () => { S.log = {}; S.stars = 0; save(); refreshOpts(); draw(); };
+$('bMission').onclick = () => {
+  const c = $('mChips'); c.replaceChildren();
+  WANTS.forEach(x => { const b = h('button', 'chip', x.label); b.onclick = () => { $('dMission').close(); newMission(x, mission && mission.who); }; c.append(b); });
+  const w = $('mWho'); w.replaceChildren();
+  WHO.forEach(x => { const b = h('button', 'chip', x.label); if (mission && mission.who === x) b.style.borderColor = '#8a56c2'; b.onclick = () => { mission.who = x; $('dMission').close(); newMission(mission.what, x); }; w.append(b); });
+  $('dMission').showModal();
+};
+
+/* ---------- départ ---------- */
+fetch('assets/cards.json').then(r => r.json()).catch(() => []).then(list => {
+  list.forEach(c => CARDS[c.label] = c); S = load(); newMission();
+});
+</script>
+</body>
+</html>

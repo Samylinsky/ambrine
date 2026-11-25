@@ -1436,7 +1436,7 @@
   "label": "Orthophoniste",
   "category": "Famille",
   "section": "famille",
-  "image": "assets/cards/p153.webp",
+  "image": "assets/cards/ortho_real.webp",
   "style": "photo"
  },
  {
@@ -1532,6 +1532,38 @@
   "category": "Lieux",
   "section": "lieux",
   "image": "assets/cards/p165.webp",
+  "style": "photo"
+ },
+ {
+  "id": 166,
+  "label": "Memory",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p166.webp",
+  "style": "photo"
+ },
+ {
+  "id": 167,
+  "label": "Jeu des voitures",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p167.webp",
+  "style": "photo"
+ },
+ {
+  "id": 168,
+  "label": "Jeu des chiffres",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p168.webp",
+  "style": "photo"
+ },
+ {
+  "id": 169,
+  "label": "Mon classeur",
+  "category": "Jeux",
+  "section": "jeux",
+  "image": "assets/cards/p169.webp",
   "style": "photo"
  }
 ]

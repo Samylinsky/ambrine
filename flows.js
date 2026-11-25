@@ -95,7 +95,7 @@ function buildFlows(find) {
     I('Mamie', 'avec mamie'), I('Papi', 'avec papi'), I('Toute seule', 'toute seule'),
     I('Jardin', 'dans le jardin'), I('Maison', 'à la maison'), I('Parc', 'au parc'), END] };
   const play = { title: 'Je veux jouer…', items: [
-    I('Puzzle', 'au puzzle', playWith), I('Ballon', 'au ballon', playWith), I('iPad', 'à l’iPad', playWith),
+    I('Puzzle', 'au puzzle', playWith), I('Memory', 'au memory', playWith), I('Jeu des voitures', 'au jeu des voitures', playWith), I('Jeu des chiffres', 'au jeu des chiffres', playWith), I('Ballon', 'au ballon', playWith), I('iPad', 'à l’iPad', playWith),
     I('Jouer aux blocs', 'aux blocs', playWith), I('Mon robot', 'avec mon robot', playWith), I('Peluche', 'avec ma peluche', playWith),
     I('Doudou', 'avec mon doudou', playWith), I('Jardin', 'dans le jardin'), I('Parc', 'au parc'), I('Copines', 'avec mes copines'),
     I('Aire de jeux', 'dans l’aire de jeux'),
@@ -153,8 +153,8 @@ function buildFlows(find) {
     I('Malade', 'je suis malade'), I('J’ai mal au ventre', 'j’ai mal au ventre'), I('J’ai mal à la tête', 'j’ai mal à la tête'),
     I('Oreille', 'j’ai mal à l’oreille'), I('Dents', 'j’ai mal aux dents')], 'parce que');
   const orthoAct = act('Chez l’orthophoniste, pour…', [
-    I('Je raconte', 'apprendre à parler'), I('Puzzle', 'faire des jeux'), I('Regarde !', 'regarder des images'), I('Lire', 'lire une histoire'),
-    I('Musique', 'chanter'), I('Dessiner', 'dessiner'), I(JOUER, 'jouer')]);
+    I('Memory', 'jouer au memory'), I('Jeu des voitures', 'jouer au jeu des voitures'), I('Jeu des chiffres', 'jouer au jeu des chiffres'),
+    I('Mon classeur', 'travailler avec mon classeur'), I('Je raconte', 'apprendre à parler'), I('Lire', 'lire une histoire'), I('Dessiner', 'dessiner')]);
   const how = act => ({ title: 'Comment j’y vais ?', items: [
     I('Bus', 'en bus', act), I('Voiture', 'en voiture', act), I('À pied', 'à pied', act), I({ label: 'Passer', emoji: '⏭️' }, '', act)] });
   const psyAct = act('Chez la psychomotricienne, pour…', [
@@ -181,7 +181,7 @@ function buildFlows(find) {
   whoMore.items = PEOPLE.map(([c, s]) => I(c, 'et ' + s, whoMore)).concat([END]);
   withWho.items.forEach(it => { if (it.say && it.say.startsWith('avec ') && it.say !== 'avec toute la famille') it.next = whoMore; });
   playWith.items.forEach(it => { if (/^avec (papa|maman|mes copines|Yusuf|Nayla|mamie|papi)$/.test(it.say)) it.next = whoMore; });
-  ACTS.forEach(n => { if (n === docAct) return; n.items.forEach(it => { if (it !== END && !it.next && !/avec|voir|papa|maman|copines|maîtresse/i.test(it.say)) it.next = withWho; }); });
+  ACTS.forEach(n => { if (n === docAct) return; n.items.forEach(it => { if (it !== END && !it.next && !/avec (papa|maman|mes copines|Yusuf|Nayla|mamie|papi)|voir|maîtresse/i.test(it.say)) it.next = withWho; }); });
   const vaisAfter = { title: 'Et après, je vais…', items: vaisItems };
   vaisCont.title = 'Et après…'; delete vaisCont.pre;
   vaisCont.items = [I({ label: 'Et après, je vais…', emoji: '➡️' }, 'et après, je vais', vaisAfter), I('Contente', 'et je suis contente'), I('Triste', 'mais je suis triste')];
@@ -244,8 +244,8 @@ function buildFlows(find) {
     ['Malade', 'j’étais malade'], ['J’ai mal au ventre', 'j’avais mal au ventre'], ['J’ai mal à la tête', 'j’avais mal à la tête'],
     ['Oreille', 'j’avais mal à l’oreille'], ['Dents', 'j’avais mal aux dents'], ['Gorge', 'j’avais mal à la gorge']]);
   const orthoDid = pastAct('Chez l’orthophoniste, qu’est-ce que j’ai fait ?', [
-    ['Je raconte', 'j’ai appris à parler'], ['Puzzle', 'j’ai fait des jeux'], ['Regarde !', 'j’ai regardé des images'], ['Lire', 'j’ai lu une histoire'],
-    ['Musique', 'j’ai chanté'], ['Dessiner', 'j’ai dessiné'], [JOUER, 'j’ai joué']]);
+    ['Memory', 'j’ai joué au memory'], ['Jeu des voitures', 'j’ai joué au jeu des voitures'], ['Jeu des chiffres', 'j’ai joué au jeu des chiffres'],
+    ['Mon classeur', 'j’ai travaillé avec mon classeur'], ['Je raconte', 'j’ai appris à parler'], ['Lire', 'j’ai lu une histoire'], ['Dessiner', 'j’ai dessiné']]);
   const restoDid = pastAct('Au restaurant, qu’est-ce que j’ai mangé ?', [
     ['Pizza', 'j’ai mangé de la pizza'], ['Frites', 'j’ai mangé des frites'], ['Pâtes', 'j’ai mangé des pâtes'], ['Viande', 'j’ai mangé de la viande'],
     ['Glace', 'j’ai mangé une glace'], ['Gâteau', 'j’ai mangé du gâteau'], ['Manger', 'j’ai mangé']]);

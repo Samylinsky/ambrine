@@ -892,7 +892,7 @@ function openParent() {
   dl.onclick = () => downloadVideos(dl, pg); c.append(dl, pg); b.append(c);
   // à propos
   c = h('div', 'card'); c.append(h('h3', '', 'À savoir'));
-  c.append(h('p', 'note', 'Version 41 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
+  c.append(h('p', 'note', 'Version 42 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
   const wipe = h('button', 'btn', '🗑 Effacer favoris, phrases et réglages'); wipe.onclick = () => { if (confirm('Tout effacer sur cet appareil (hors photos de famille) ?')) { ['ambrine-favs', 'ambrine-labels', 'ambrine-story', 'ambrine-settings'].forEach(k => localStorage.removeItem(k)); location.reload(); } };
   c.append(wipe); b.append(c);
   if (!$('#parentDialog').open) $('#parentDialog').showModal();
@@ -971,6 +971,7 @@ async function init() {
   cards.forEach(c => { c.photo = c.style === 'photo' ? c.image : null; if (S.set.imgStyle === 'dessin' && c.drawing) { c.image = c.drawing; c.anim = c.animD; } });
   S.cards = cards; S.signs = signs; S.animIndex = ai;
   if (!S.week) { S.week = {}; for (let d = 0; d < 7; d++) S.week[d] = {}; const old = LS.get('ambrine-day', null); if (old) S.week[new Date().getDay()] = old; }
+  if (!LS.get('ambrine-ortho-v1', null)) { [1, 3].forEach(d => { S.week[d] = S.week[d] || {}; S.week[d].matin = 'Orthophoniste'; }); LS.set('ambrine-week', S.week); LS.set('ambrine-ortho-v1', 1); }   // orthophoniste : lundi et mercredi matin
   S.flows = buildFlows(lookup); if (S.flows.miss.length) console.warn('cartes manquantes', S.flows.miss);
   const fs = h('button', '', '⛶'); fs.id = 'fsBtn'; fs.onclick = toggleFull; document.body.append(fs);
   const hb = h('button', '', '🏠'); hb.id = 'fsHome'; hb.setAttribute('aria-label', 'Accueil'); hb.onclick = () => go('home'); document.body.append(hb);

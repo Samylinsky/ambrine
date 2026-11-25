@@ -34,8 +34,8 @@
  {
   "id": 4,
   "label": "Aide-moi",
-  "category": "Parler",
-  "section": "communique",
+  "category": "Besoins",
+  "section": "besoins",
   "image": "assets/cards/p4.webp",
   "drawing": "assets/cards/04.webp",
   "animD": "assets/anim/04",
@@ -88,7 +88,7 @@
   "id": 9,
   "label": "Toilettes",
   "category": "Besoins",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p9.webp",
   "sign": 148,
   "drawing": "assets/cards/09.webp",
@@ -99,7 +99,7 @@
   "id": 10,
   "label": "J’ai mal au ventre",
   "category": "Besoins",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p10.webp",
   "sign": 60,
   "drawing": "assets/cards/10.webp",
@@ -129,8 +129,8 @@
  {
   "id": 13,
   "label": "Trop de bruit",
-  "category": "Émotions",
-  "section": "emotions",
+  "category": "Besoins",
+  "section": "besoins",
   "image": "assets/cards/p13.webp",
   "sign": 217,
   "drawing": "assets/cards/13.webp",
@@ -140,8 +140,8 @@
  {
   "id": 14,
   "label": "Trop de monde",
-  "category": "Émotions",
-  "section": "emotions",
+  "category": "Besoins",
+  "section": "besoins",
   "image": "assets/cards/p14.webp",
   "drawing": "assets/cards/14.webp",
   "animD": "assets/anim/14",
@@ -150,8 +150,8 @@
  {
   "id": 15,
   "label": "Je suis mouillée",
-  "category": "Émotions",
-  "section": "emotions",
+  "category": "Besoins",
+  "section": "besoins",
   "image": "assets/cards/p15.webp",
   "drawing": "assets/cards/15.webp",
   "animD": "assets/anim/15",
@@ -160,8 +160,8 @@
  {
   "id": 16,
   "label": "J’ai chaud",
-  "category": "Émotions",
-  "section": "emotions",
+  "category": "Besoins",
+  "section": "besoins",
   "image": "assets/cards/p16.webp",
   "drawing": "assets/cards/16.webp",
   "animD": "assets/anim/16",
@@ -170,8 +170,8 @@
  {
   "id": 17,
   "label": "J’ai froid",
-  "category": "Émotions",
-  "section": "emotions",
+  "category": "Besoins",
+  "section": "besoins",
   "image": "assets/cards/p17.webp",
   "drawing": "assets/cards/17.webp",
   "animD": "assets/anim/17",
@@ -181,7 +181,7 @@
   "id": 18,
   "label": "J’ai mal à la tête",
   "category": "Besoins",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p18.webp",
   "sign": 63,
   "drawing": "assets/cards/18.webp",
@@ -505,7 +505,7 @@
   "id": 49,
   "label": "Manger",
   "category": "Actions",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p49.webp",
   "sign": 22,
   "drawing": "assets/cards/49.webp",
@@ -516,7 +516,7 @@
   "id": 50,
   "label": "Boire",
   "category": "Actions",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p50.webp",
   "sign": 13,
   "drawing": "assets/cards/50.webp",
@@ -558,7 +558,7 @@
   "id": 54,
   "label": "Sortir",
   "category": "Actions",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p54.webp",
   "drawing": "assets/cards/54.webp",
   "animD": "assets/anim/54",
@@ -1019,7 +1019,7 @@
   "id": 101,
   "label": "Dents",
   "category": "Mon corps",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p101.webp",
   "style": "photo"
  },
@@ -1027,7 +1027,7 @@
   "id": 102,
   "label": "Oreille",
   "category": "Mon corps",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p102.webp",
   "style": "photo"
  },
@@ -1035,7 +1035,7 @@
   "id": 103,
   "label": "Pied",
   "category": "Mon corps",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p103.webp",
   "style": "photo"
  },
@@ -1043,7 +1043,7 @@
   "id": 104,
   "label": "Main",
   "category": "Mon corps",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p104.webp",
   "style": "photo"
  },
@@ -1051,7 +1051,7 @@
   "id": 105,
   "label": "Yeux",
   "category": "Mon corps",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p105.webp",
   "style": "photo"
  },
@@ -1059,15 +1059,15 @@
   "id": 106,
   "label": "Gorge",
   "category": "Mon corps",
-  "section": "besoins",
+  "section": "corps",
   "image": "assets/cards/p106.webp",
   "style": "photo"
  },
  {
   "id": 107,
   "label": "Fatiguée",
-  "category": "Émotions",
-  "section": "emotions",
+  "category": "Besoins",
+  "section": "besoins",
   "image": "assets/cards/p107.webp",
   "style": "photo"
  },
@@ -1082,8 +1082,8 @@
  {
   "id": 109,
   "label": "Malade",
-  "category": "Émotions",
-  "section": "emotions",
+  "category": "Besoins",
+  "section": "besoins",
   "image": "assets/cards/p109.webp",
   "style": "photo"
  },
@@ -1565,5 +1565,27 @@
   "section": "jeux",
   "image": "assets/cards/p169.webp",
   "style": "photo"
+ },
+ {
+  "id": 170,
+  "label": "Mon doudou",
+  "category": "Besoins",
+  "section": "besoins",
+  "image": "assets/cards/p41.webp",
+  "style": "photo"
+ },
+ {
+  "id": 171,
+  "label": "Mes lunettes",
+  "category": "Besoins",
+  "section": "besoins",
+  "emoji": "👓"
+ },
+ {
+  "id": 172,
+  "label": "Ça gratte",
+  "category": "Besoins",
+  "section": "besoins",
+  "emoji": "🫧"
  }
 ]

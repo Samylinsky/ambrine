@@ -128,7 +128,7 @@ function buildFlows(find) {
   const ACTS = [];
   const act = (title, items, pre) => { const n = { title, pre: pre || 'pour', items: items.map(it => ({ ...it })).concat([END]) }; ACTS.push(n); return n; };
   const ecoleAct = act('À l’école, pour…', [
-    I('Récréation', 'jouer à la récréation'), I('Piscine', 'aller à la piscine avec la classe'), I('Nager', 'nager à la piscine'), I('Dessiner', 'faire un dessin'), I('Maîtresse', 'voir la maîtresse'), I('Mon AESH', 'travailler avec mon AESH'),
+    I('Récréation', 'jouer à la récréation'), I('Piscine', 'aller à la piscine'), I('Nager', 'nager à la piscine'), I('Dessiner', 'faire un dessin'), I('Maîtresse', 'voir la maîtresse'), I('Mon AESH', 'travailler avec mon AESH'),
     I('Lire', 'lire'), I('Cantine', 'manger à la cantine'), I('En classe', 'travailler en classe'), I('Puzzle', 'faire un puzzle'),
     I('Sport', 'faire du sport'), I('Musique', 'écouter de la musique'), I('Danser', 'danser'), I('Jouer aux blocs', 'jouer aux blocs')]);
   const parcAct = act('Là-bas, pour…', [
@@ -171,21 +171,26 @@ function buildFlows(find) {
   vaisCont.items = vaisItems.concat([I(JOUER, 'jouer'), I('Dessiner', 'faire un dessin'), I('Manger', 'manger'), I('Copines', 'voir mes copines'),
     I('Papa', 'voir papa'), I('Maman', 'voir maman'), I('Télé', 'regarder la télé'), I('iPad', 'jouer à l’iPad')]);
   /* où → comment → pour quoi → AVEC QUI → et après (seulement ce qui va avec) */
-  const withWho = { title: 'Avec qui ?', items: [
+  const withWho = { title: 'Qui m’accompagne ?', items: [
     I('Papa', 'avec papa'), I('Maman', 'avec maman'), I('Yusuf', 'avec Yusuf'), I('Nayla', 'avec Nayla'), I('Mamie', 'avec mamie'), I('Papi', 'avec papi'),
-    I('Copines', 'avec mes copines'), I({ label: 'Toute la famille', image: 'assets/cards/famille_tous.webp', style: 'photo' }, 'avec toute la famille'),
+    I('Copines', 'avec mes copines'), I('Maîtresse', 'avec la maîtresse'), I('Mon AESH', 'avec mon AESH'), I({ label: 'Toute la famille', image: 'assets/cards/famille_tous.webp', style: 'photo' }, 'avec toute la famille'),
     I({ label: 'Toute seule', emoji: '🙋‍♀️' }, 'toute seule'), I({ label: 'Passer', emoji: '⏭️' }, '')] };
   /* plusieurs personnes : « avec Yusuf et Nayla et papa » */
-  const PEOPLE = [['Papa', 'papa'], ['Maman', 'maman'], ['Yusuf', 'Yusuf'], ['Nayla', 'Nayla'], ['Mamie', 'mamie'], ['Papi', 'papi'], ['Copines', 'mes copines']];
+  const PEOPLE = [['Papa', 'papa'], ['Maman', 'maman'], ['Yusuf', 'Yusuf'], ['Nayla', 'Nayla'], ['Mamie', 'mamie'], ['Papi', 'papi'], ['Copines', 'mes copines'], ['Maîtresse', 'la maîtresse'], ['Mon AESH', 'mon AESH']];
   const whoMore = { title: 'Et qui encore ?', hideUsed: true, items: [] };
   whoMore.items = PEOPLE.map(([c, s]) => I(c, 'et ' + s, whoMore)).concat([END]);
   withWho.items.forEach(it => { if (it.say && it.say.startsWith('avec ') && it.say !== 'avec toute la famille') it.next = whoMore; });
   playWith.items.forEach(it => { if (/^avec (papa|maman|mes copines|Yusuf|Nayla|mamie|papi)$/.test(it.say)) it.next = whoMore; });
-  ACTS.forEach(n => { if (n === docAct) return; n.items.forEach(it => { if (it !== END && !it.next && !/avec (papa|maman|mes copines|Yusuf|Nayla|mamie|papi)|voir|maîtresse/i.test(it.say)) it.next = withWho; }); });
+  ACTS.forEach(n => { n.items.forEach(it => { if (it !== END && !it.next && !/avec (papa|maman|mes copines|Yusuf|Nayla|mamie|papi|la maîtresse|mon AESH)/i.test(it.say)) it.next = withWho; }); });
   const vaisAfter = { title: 'Et après, je vais…', items: vaisItems };
   vaisCont.title = 'Et après…'; delete vaisCont.pre;
   vaisCont.items = [I({ label: 'Et après, je vais…', emoji: '➡️' }, 'et après, je vais', vaisAfter), I('Contente', 'et je suis contente'), I('Triste', 'mais je suis triste')];
   withWho.cont = vaisCont; whoMore.cont = vaisCont;
+  /* plusieurs jeux chez l'orthophoniste : « jouer au memory et au jeu des voitures » */
+  const ORTHO_GAMES = [['Memory', 'au memory'], ['Jeu des voitures', 'au jeu des voitures'], ['Jeu des chiffres', 'au jeu des chiffres'], ['Puzzle', 'au puzzle']];
+  const gameMore = { title: 'Et quoi encore ?', hideUsed: true, items: [] };
+  gameMore.items = ORTHO_GAMES.map(([c, s]) => I(c, 'et ' + s, gameMore)).concat([I({ label: 'Continuer', emoji: '➡️' }, '', withWho)]);
+  orthoAct.items.forEach(it => { if (/^jouer au /.test(it.say)) it.next = gameMore; });
   ACTS.forEach(n => { n.cont = vaisCont; });
 
   /* ================= JE RACONTE (quand, où, avec qui, quoi, comment, pourquoi) ================= */
@@ -246,6 +251,10 @@ function buildFlows(find) {
   const orthoDid = pastAct('Chez l’orthophoniste, qu’est-ce que j’ai fait ?', [
     ['Memory', 'j’ai joué au memory'], ['Jeu des voitures', 'j’ai joué au jeu des voitures'], ['Jeu des chiffres', 'j’ai joué au jeu des chiffres'],
     ['Mon classeur', 'j’ai travaillé avec mon classeur'], ['Je raconte', 'j’ai appris à parler'], ['Lire', 'j’ai lu une histoire'], ['Dessiner', 'j’ai dessiné']]);
+  const gameMorePast = { title: 'Et quoi encore ?', hideUsed: true, items: ORTHO_GAMES.map(([c, s]) => I(c, 'et ' + s)) };
+  gameMorePast.items.forEach(it => { it.next = gameMorePast; });
+  gameMorePast.items.push(I({ label: 'Continuer', emoji: '➡️' }, '', feelPast));
+  orthoDid.items.forEach(it => { if (/^j’ai joué au /.test(it.say)) it.next = gameMorePast; });
   const restoDid = pastAct('Au restaurant, qu’est-ce que j’ai mangé ?', [
     ['Pizza', 'j’ai mangé de la pizza'], ['Frites', 'j’ai mangé des frites'], ['Pâtes', 'j’ai mangé des pâtes'], ['Viande', 'j’ai mangé de la viande'],
     ['Glace', 'j’ai mangé une glace'], ['Gâteau', 'j’ai mangé du gâteau'], ['Manger', 'j’ai mangé']]);

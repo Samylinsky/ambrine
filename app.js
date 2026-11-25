@@ -70,7 +70,7 @@ function updateVoiceWarn() {
 function lastBits(t) { const p = t.split(/(?<=\.) /); return p.length > 2 ? '… ' + p.slice(-2).join(' ') : t; }
 function sentenceText(words) {
   const t = words.map((w, i) => w.say != null ? w.say : (i === 0 ? w.label : w.label.charAt(0).toLowerCase() + w.label.slice(1))).join(' ');
-  const r = t.replace(/\s+/g, ' ').replace(/ ,/g, ',').replace(/,(\s*,)+/g, ',').replace(/,?\s*\.\s*/g, '. ').replace(/ et ((?:à|au|aux|j’ai) [^,.]*?)(?= et (?:à|au|aux|j’ai) )/g, ', $1').replace(/\. ([a-zàâéèêîôûç])/g, (m, l) => '. ' + l.toUpperCase()).replace(/ et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines)(?= et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines))/g, ', $1').trim();
+  const r = t.replace(/\s+/g, ' ').replace(/ ,/g, ',').replace(/,(\s*,)+/g, ',').replace(/,?\s*\.\s*/g, '. ').replace(/ et ((?:à|au|aux|j’ai) [^,.]*?)(?= et (?:à|au|aux|j’ai) )/g, ', $1').replace(/\. ([a-zàâéèêîôûç])/g, (m, l) => '. ' + l.toUpperCase()).replace(/ et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines|la maîtresse|mon AESH)(?= et (papa|maman|Yusuf|Nayla|mamie|papi|mes copines|la maîtresse|mon AESH))/g, ', $1').trim();
   return r.charAt(0).toUpperCase() + r.slice(1);
 }
 function speak(text, big = false) {
@@ -109,7 +109,7 @@ function drawStrip(added) {
     const kill = e => { e.preventDefault(); e.stopPropagation(); removeWord(i); };
     x.addEventListener('click', kill); x.addEventListener('touchend', kill, { passive: false }); x.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
     if (S.fix && S.fix.i === i) el.classList.add('fixing');
-    el.append(x); t.append(el); });
+    const wrap = h('span', 'tokWrap'); wrap.append(el, x); t.append(wrap); });   // la croix à côté de la pièce (pas dedans) : sur iPad, un toucher dans un bouton va au bouton
   t.scrollLeft = t.scrollWidth;
   const band = $('#band');
   if (band && document.body.classList.contains('immersive')) {     // la bande grandit : on montre la dernière pièce, les boutons sont poussés à droite
@@ -892,7 +892,7 @@ function openParent() {
   dl.onclick = () => downloadVideos(dl, pg); c.append(dl, pg); b.append(c);
   // à propos
   c = h('div', 'card'); c.append(h('h3', '', 'À savoir'));
-  c.append(h('p', 'note', 'Version 42 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
+  c.append(h('p', 'note', 'Version 47 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
   const wipe = h('button', 'btn', '🗑 Effacer favoris, phrases et réglages'); wipe.onclick = () => { if (confirm('Tout effacer sur cet appareil (hors photos de famille) ?')) { ['ambrine-favs', 'ambrine-labels', 'ambrine-story', 'ambrine-settings'].forEach(k => localStorage.removeItem(k)); location.reload(); } };
   c.append(wipe); b.append(c);
   if (!$('#parentDialog').open) $('#parentDialog').showModal();

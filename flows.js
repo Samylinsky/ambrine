@@ -119,7 +119,9 @@ function buildFlows(find) {
     I('Manger', 'manger', meals), I('Boire', 'boire', drinks), I(JOUER, 'jouer', play), I({ label: 'Voir…', emoji: '👀' }, 'voir', voir),
     I('Piscine', 'aller à la piscine'), I('Bus', 'prendre le bus', busTo), I('Parc', 'aller au parc'), I('Dehors', 'sortir dehors'), I('Télé', 'regarder la télé'),
     I('iPad', 'l’iPad'), I('Câlin', 'faire un câlin', hugWho), I('Dormir', 'dormir'), I('Bain', 'prendre mon bain'),
-    I('Maison', 'rentrer à la maison'), I('Aide-moi', 'de l’aide'), I('Cadeau', 'un cadeau'), I('Toilettes', 'aller aux toilettes')];
+    I('Maison', 'rentrer à la maison'), I('Aide-moi', 'de l’aide'), I('Cadeau', 'un cadeau'),
+    I('Glace', 'une glace'), I('Chocolat', 'du chocolat'), I('Puzzle', 'faire un puzzle'), I('Récréation', 'aller à la récréation'),
+    I('Mamie', 'aller chez mamie'), I('Papi', 'aller chez papi'), I('Restaurant', 'aller au restaurant'), I('Dessiner', 'dessiner'), I('Musique', 'écouter de la musique')];
   const veux = { title: 'Je veux…', items: veuxItems };
   const veuxCont = { title: 'Et je veux aussi…', pre: 'et je veux', items: veuxItems };
 

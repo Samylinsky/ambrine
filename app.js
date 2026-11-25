@@ -311,11 +311,11 @@ const THEMES = [
   { lab: 'Je ressens', pic: 'Contente', emoji: '💗', color: '#ec4f9a', go: () => startFlow('suis') },
   { lab: 'Je joue', pic: 'Puzzle', emoji: '🧩', color: '#f4b400', go: () => startFlow('joue') },
   { lab: 'Ma famille', pic: 'Tout le monde', emoji: '👨‍👩‍👧', color: '#8b57d9', go: () => go('famille') },
-  { lab: 'Je vais', pic: 'Sortir', emoji: '🚌', color: '#14ae9f', go: () => startFlow('vais') },
+  { lab: 'Je veux', pic: 'Je veux', emoji: '🙌', color: '#14ae9f', go: () => startFlow('veux') },
   { lab: 'Je demande', pic: 'Tu viens ?', emoji: '👋', color: '#ff7043', go: () => startFlow('demande') }];
 function renderCards(sec) {
   const v = $('#view-cards'); v.replaceChildren(); v.append(viewTitle(sec));
-  if (sec.id === 'besoins') { const r = h('div', 'flowRoots'); [['veux', 'Je veux…', 'Je veux'], ['mal', 'J’ai mal…', 'J’ai mal à la tête']].forEach(([k, lab, pic]) => { const b = h('button', 'flowBtn big'); b.append(picEl(lookup(pic)), h('span', '', lab)); b.onclick = () => startFlow(k); r.append(b); }); v.append(r); }
+  if (sec.id === 'besoins') { const r = h('div', 'flowRoots'); [].forEach(([k, lab, pic]) => { const b = h('button', 'flowBtn big'); b.append(picEl(lookup(pic)), h('span', '', lab)); b.onclick = () => startFlow(k); r.append(b); }); v.append(r); }
   sec.groups.forEach(([section, , cat]) => {
     let list = S.cards.filter(c => c.section === section && (!cat || c.category === cat));
     if (!list.length) return;
@@ -891,7 +891,7 @@ function openParent() {
   dl.onclick = () => downloadVideos(dl, pg); c.append(dl, pg); b.append(c);
   // à propos
   c = h('div', 'card'); c.append(h('h3', '', 'À savoir'));
-  c.append(h('p', 'note', 'Version 49 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
+  c.append(h('p', 'note', 'Version 50 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
   const wipe = h('button', 'btn', '🗑 Effacer favoris, phrases et réglages'); wipe.onclick = () => { if (confirm('Tout effacer sur cet appareil (hors photos de famille) ?')) { ['ambrine-favs', 'ambrine-labels', 'ambrine-story', 'ambrine-settings'].forEach(k => localStorage.removeItem(k)); location.reload(); } };
   c.append(wipe); b.append(c);
   if (!$('#parentDialog').open) $('#parentDialog').showModal();

@@ -173,7 +173,6 @@ function sayStrip(big = true) { if (!S.words.length) return; speak(endP(sentence
 function removeWord(i) {
   const w = S.words[i]; if (!w) return;
   const f = S.flow;
-  if (f && w.node && S.view === 'phrases') { S.fix = { i, w }; drawStrip(); renderPhrases(); return; }
   S.fix = null; S.words.splice(i, 1);
   if (f) f.stack.forEach(st => { if (st.words.length > i) st.words.splice(i, 1); });
   drawStrip(); if (S.view === 'phrases' && f) renderPhrases();
@@ -892,7 +891,7 @@ function openParent() {
   dl.onclick = () => downloadVideos(dl, pg); c.append(dl, pg); b.append(c);
   // à propos
   c = h('div', 'card'); c.append(h('h3', '', 'À savoir'));
-  c.append(h('p', 'note', 'Version 47 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
+  c.append(h('p', 'note', 'Version 48 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
   const wipe = h('button', 'btn', '🗑 Effacer favoris, phrases et réglages'); wipe.onclick = () => { if (confirm('Tout effacer sur cet appareil (hors photos de famille) ?')) { ['ambrine-favs', 'ambrine-labels', 'ambrine-story', 'ambrine-settings'].forEach(k => localStorage.removeItem(k)); location.reload(); } };
   c.append(wipe); b.append(c);
   if (!$('#parentDialog').open) $('#parentDialog').showModal();

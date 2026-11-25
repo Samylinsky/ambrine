@@ -184,7 +184,12 @@ function buildFlows(find) {
   ACTS.forEach(n => { n.items.forEach(it => { if (it !== END && !it.next && !/avec (papa|maman|mes copines|Yusuf|Nayla|mamie|papi|la maîtresse|mon AESH)/i.test(it.say)) it.next = withWho; }); });
   const vaisAfter = { title: 'Et après, je vais…', items: vaisItems };
   vaisCont.title = 'Et après…'; delete vaisCont.pre;
-  vaisCont.items = [I({ label: 'Et après, je vais…', emoji: '➡️' }, 'et après, je vais', vaisAfter), I('Contente', 'et je suis contente'), I('Triste', 'mais je suis triste')];
+  /* et après… : toutes les images comme au début, la journée continue */
+  const footTo = transNode('À pied pour aller où ?');
+  vaisCont.items = vaisItems.filter(it => it.c && !['Bus', 'Voiture', 'Bain', 'Dormir', 'Toilettes'].includes(it.c.label))
+    .map(it => ({ ...it, say: 'et après, je vais ' + it.say }))
+    .concat([I('Bus', 'et après, je reprends le bus', busTo), I('Voiture', 'et après, je reprends la voiture', carTo), I('À pied', 'et après, je rentre à pied', footTo),
+      I('Dormir', 'et après, je vais dormir'), I('Contente', 'et je suis contente', becHappy), I('Triste', 'mais je suis triste', becSad), END]);
   withWho.cont = vaisCont; whoMore.cont = vaisCont;
   /* plusieurs jeux chez l'orthophoniste : « jouer au memory et au jeu des voitures » */
   const ORTHO_GAMES = [['Memory', 'au memory'], ['Jeu des voitures', 'au jeu des voitures'], ['Jeu des chiffres', 'au jeu des chiffres'], ['Puzzle', 'au puzzle']];

@@ -691,15 +691,15 @@ const DAY_OPTS = [   // [carte, présent (aujourd'hui / demain), passé (ce que 
   ['Télé', 'je regarde la télé', 'j’ai regardé la télé'], ['iPad', 'je joue à l’iPad', 'j’ai joué à l’iPad'],
   ['Bain', 'je prends mon bain', 'j’ai pris mon bain'], ['Dormir', 'je vais dormir', 'je suis allée dormir'], ['Me reposer', 'je me repose', 'je me suis reposée']];
 // [clé, carte, aujourd'hui, demain, passé]
-const DAY_MOMENTS = [['matin', 'Ce matin', 'ce matin,', 'demain matin,', 'ce matin,'], ['midi', 'Manger', 'à midi,', 'demain midi,', 'à midi,'],
-  ['aprem', 'Cet après-midi', 'cet après-midi,', 'demain après-midi,', 'cet après-midi,'], ['soir', 'Ce soir', 'ce soir,', 'demain soir,', 'ce soir,']];
+const DAY_MOMENTS = [['matin', 'Ce matin', 'ce matin,', 'demain matin,', 'ce matin,', 'hier matin,'], ['midi', 'Manger', 'à midi,', 'demain midi,', 'à midi,', 'hier midi,'],
+  ['aprem', 'Cet après-midi', 'cet après-midi,', 'demain après-midi,', 'cet après-midi,', 'hier après-midi,'], ['soir', 'Ce soir', 'ce soir,', 'demain soir,', 'ce soir,', 'hier soir,']];
 const MOMENT_NAME = { matin: 'Le matin', midi: 'À midi', aprem: 'L’après-midi', soir: 'Le soir' };
 const JOUR_NOM = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
 const planOf = d => S.week[((d % 7) + 7) % 7] || {};
 const capF = t => t.charAt(0).toUpperCase() + t.slice(1);
 function planLine(d, k, mode) {   // mode : 'today' | 'tomorrow' | 'past'
   const m = DAY_MOMENTS.find(x => x[0] === k), o = DAY_OPTS.find(x => x[0] === planOf(d)[k]); if (!o) return '';
-  return endP(capF((mode === 'tomorrow' ? m[3] : mode === 'past' ? m[4] : m[2]) + ' ' + (mode === 'past' ? o[2] : o[1])));
+  return endP(capF((mode === 'tomorrow' ? m[3] : mode === 'past' ? m[4] : mode === 'yesterday' ? m[5] : m[2]) + ' ' + (mode === 'past' || mode === 'yesterday' ? o[2] : o[1])));
 }
 function planText(d, mode) { return DAY_MOMENTS.map(m => planLine(d, m[0], mode)).filter(Boolean).join(' '); }
 const picEl = c => c && c.image ? Object.assign(document.createElement('img'), { src: c.image, alt: '' }) : h('div', 'emo', (c && c.emoji) || '•');
@@ -759,7 +759,7 @@ function renderDayplan(sec) {
   // le programme
   const any = DAY_MOMENTS.some(m => planOf(today)[m[0]]);
   if (any) { const p = h('button', 'btn', '🗣️ Raconter ma journée avec le programme'); p.onclick = () => speak(planText(today, 'past'), true); v.append(h('div', 'row flowBar', '')); v.lastChild.append(p); }
-  v.append(planBlock('Aujourd’hui (' + JOUR_NOM[today] + ')', today, 'today', 'tod'), planBlock('Demain (' + JOUR_NOM[(today + 1) % 7] + ')', today + 1, 'tomorrow', 'tom'));
+  v.append(planBlock('Hier (' + JOUR_NOM[(today + 6) % 7] + ')', (today + 6) % 7, 'yesterday', 'yes'), planBlock('Aujourd’hui (' + JOUR_NOM[today] + ')', today, 'today', 'tod'), planBlock('Demain (' + JOUR_NOM[(today + 1) % 7] + ')', today + 1, 'tomorrow', 'tom'));
   const ed = h('button', 'btn editPlan', '✏️ Préparer la journée (parent : appui long ou 3 touchers)'); longBtn(ed, () => { S.dayEdit = today; renderView(); }); v.append(ed);
 }
 function renderDayEdit(sec) {
@@ -891,7 +891,7 @@ function openParent() {
   dl.onclick = () => downloadVideos(dl, pg); c.append(dl, pg); b.append(c);
   // à propos
   c = h('div', 'card'); c.append(h('h3', '', 'À savoir'));
-  c.append(h('p', 'note', 'Version 48 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
+  c.append(h('p', 'note', 'Version 49 · 88 pictogrammes + cartes mot/emoji · phrases guidées · 88 animations articulées (le reste : appui avec retour visuel, sans animation). Les vidéos Elix et AutiSignes sont des références de signes : le lien avec chaque pictogramme a été fait d’après le titre et doit être vérifié par l’orthophoniste. Usage privé familial.'));
   const wipe = h('button', 'btn', '🗑 Effacer favoris, phrases et réglages'); wipe.onclick = () => { if (confirm('Tout effacer sur cet appareil (hors photos de famille) ?')) { ['ambrine-favs', 'ambrine-labels', 'ambrine-story', 'ambrine-settings'].forEach(k => localStorage.removeItem(k)); location.reload(); } };
   c.append(wipe); b.append(c);
   if (!$('#parentDialog').open) $('#parentDialog').showModal();
